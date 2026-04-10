@@ -22,3 +22,17 @@
 .dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
 .teal { background: var(--teal-400); } .blue { background: var(--blue-400); } .green { background: var(--green-400); } .amber { background: var(--amber-400); }
 .main { flex: 1; padding: 1.5rem; display: flex; flex-direction: column; gap: 1.25rem; min-height: 0; }
+
+@media (max-width: 768px) {
+  .body { flex-direction: column; }
+  .sidebar { width: 100%; height: auto; position: static; flex-direction: row; overflow-x: auto; overflow-y: hidden; padding: 0.5rem 0.75rem; border-right: none; border-bottom: 1px solid var(--border); gap: 4px; flex-wrap: nowrap; }
+  .navSection { display: none; }
+  .navItem { white-space: nowrap; padding: 6px 12px; font-size: 12px; flex-shrink: 0; }
+  .main { padding: 1rem; }
+  .topbar { padding: 0 0.75rem; }
+  .logoBrand { display: none; }
+  .storeBadge { font-size: 11px; padding: 3px 8px; }
+  .userName { display: none; }
+  .userRole { display: none; }
+  .logoutBtn { font-size: 11px; padding: 4px 8px; }
+}
