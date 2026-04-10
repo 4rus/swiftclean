@@ -1,0 +1,24 @@
+.app { display: flex; flex-direction: column; min-height: 100vh; }
+.topbar { position: sticky; top: 0; z-index: 10; height: 54px; background: var(--surface); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 1.25rem; box-shadow: var(--shadow-sm); }
+.logo { display: flex; align-items: center; gap: 10px; }
+.logoIcon { width: 32px; height: 32px; border-radius: 9px; background: var(--teal-400); color: white; font-size: 15px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.logoText { font-size: 15px; font-weight: 600; display: block; line-height: 1.1; }
+.logoBrand { font-size: 10px; color: var(--text-3); display: block; }
+.topRight { display: flex; align-items: center; gap: 10px; }
+.storeBadge { font-size: 12px; padding: 4px 10px; background: var(--teal-50); color: var(--teal-600); border-radius: 20px; font-weight: 500; border: 1px solid var(--teal-100); }
+.notifDot { min-width: 20px; height: 20px; border-radius: 20px; background: var(--red-400); color: white; font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center; padding: 0 5px; }
+.userPill { display: flex; align-items: center; gap: 8px; }
+.avatar { width: 30px; height: 30px; border-radius: 50%; background: var(--teal-50); color: var(--teal-600); font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.userName { font-size: 13px; font-weight: 500; line-height: 1.1; }
+.userRole { font-size: 10px; color: var(--text-3); text-transform: capitalize; }
+.logoutBtn { font-size: 12px; padding: 5px 11px; border: 1px solid var(--border-md); border-radius: var(--radius); color: var(--text-2); background: transparent; cursor: pointer; transition: background 0.12s; }
+.logoutBtn:hover { background: var(--gray-100); }
+.body { display: flex; flex: 1; }
+.sidebar { width: 205px; flex-shrink: 0; background: var(--surface); border-right: 1px solid var(--border); padding: 1rem 0.75rem; display: flex; flex-direction: column; gap: 2px; position: sticky; top: 54px; height: calc(100vh - 54px); overflow-y: auto; }
+.navSection { font-size: 10px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-3); padding: 10px 8px 4px; }
+.navItem { display: flex; align-items: center; gap: 9px; padding: 8px 10px; border-radius: var(--radius); font-size: 13px; color: var(--text-2); transition: background 0.1s, color 0.1s; }
+.navItem:hover { background: var(--gray-100); color: var(--text); }
+.navItem.active { background: var(--teal-50); color: var(--teal-600); font-weight: 500; }
+.dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.teal { background: var(--teal-400); } .blue { background: var(--blue-400); } .green { background: var(--green-400); } .amber { background: var(--amber-400); }
+.main { flex: 1; padding: 1.5rem; display: flex; flex-direction: column; gap: 1.25rem; min-height: 0; }

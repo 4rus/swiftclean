@@ -1,0 +1,9 @@
+.header { display: flex; align-items: flex-start; justify-content: space-between; }
+.title { font-size: 20px; font-weight: 600; }
+.sub { font-size: 13px; color: var(--text-2); }
+.table { width: 100%; border-collapse: collapse; }
+.table th { padding: 9px 1.1rem; text-align: left; font-size: 11px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.04em; background: var(--gray-50); border-bottom: 1px solid var(--border); }
+.table td { padding: 11px 1.1rem; border-bottom: 1px solid var(--border); font-size: 13px; }
+.table tr:last-child td { border-bottom: none; }
+.table tr:hover td { background: var(--gray-50); }
+.empty { text-align: center; color: var(--text-3); padding: 2.5rem !important; }

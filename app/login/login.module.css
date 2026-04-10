@@ -1,0 +1,26 @@
+.wrap { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--bg); padding: 2rem; }
+.box { width: 100%; max-width: 390px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 2.5rem 2rem; box-shadow: var(--shadow); }
+
+.logoArea { text-align: center; margin-bottom: 1.5rem; }
+.logoIcon { width: 50px; height: 50px; border-radius: 14px; background: var(--teal-400); color: white; font-size: 22px; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; }
+.logoName { font-size: 22px; font-weight: 600; }
+.logoSub { font-size: 12px; color: var(--text-2); margin-top: 3px; }
+
+.gpsBanner { border-radius: var(--radius); padding: 10px 14px; font-size: 13px; font-weight: 500; margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; }
+.gps_idle    { background: var(--gray-100); color: var(--gray-600); }
+.gps_checking{ background: var(--amber-50); color: var(--amber-600); }
+.gps_ok      { background: var(--green-50); color: var(--green-600); }
+.gps_tooFar  { background: var(--red-50);   color: var(--red-600); }
+.gps_denied  { background: var(--red-50);   color: var(--red-600); }
+
+.retryBtn { font-size: 12px; padding: 3px 10px; border-radius: 20px; border: 1px solid currentColor; background: transparent; color: inherit; cursor: pointer; margin-left: 8px; }
+
+.errorBox { font-size: 12px; color: var(--red-600); background: var(--red-50); border-radius: var(--radius); padding: 9px 12px; margin-bottom: 10px; line-height: 1.5; }
+
+.form { display: flex; flex-direction: column; gap: 14px; }
+
+.submitBtn { width: 100%; padding: 11px; background: var(--teal-400); color: white; border: none; border-radius: var(--radius); font-size: 14px; font-weight: 500; cursor: pointer; transition: background 0.15s; margin-top: 4px; }
+.submitBtn:hover:not(:disabled) { background: var(--teal-600); }
+.submitBtn:disabled { opacity: 0.55; cursor: not-allowed; }
+
+.hint { text-align: center; font-size: 12px; color: var(--text-3); margin-top: 1.5rem; line-height: 1.6; }

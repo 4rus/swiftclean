@@ -1,0 +1,15 @@
+/*!******************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[7].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[7].use[3]!./app/employees/employees.module.css ***!
+  \******************************************************************************************************************************************************************************************************************************************************************************/
+.employees_header__ia9Xr { display: flex; align-items: flex-start; justify-content: space-between; }
+.employees_title__rqLoj { font-size: 20px; font-weight: 600; }
+.employees_sub__Wh0Si { font-size: 13px; color: var(--text-2); }
+.employees_table__c8FoK { width: 100%; border-collapse: collapse; }
+.employees_table__c8FoK th { padding: 9px 1.1rem; text-align: left; font-size: 11px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.04em; background: var(--gray-50); border-bottom: 1px solid var(--border); }
+.employees_table__c8FoK td { padding: 12px 1.1rem; border-bottom: 1px solid var(--border); font-size: 13px; }
+.employees_table__c8FoK tr:last-child td { border-bottom: none; }
+.employees_table__c8FoK tr:hover td { background: var(--gray-50); }
+.employees_nameCell__6mDdL { display: flex; align-items: center; gap: 10px; }
+.employees_avatar__rsjz5 { width: 32px; height: 32px; border-radius: 50%; font-size: 12px; font-weight: 600; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.employees_empty__3m_lk { text-align: center; color: var(--text-3); padding: 2.5rem !important; }
+

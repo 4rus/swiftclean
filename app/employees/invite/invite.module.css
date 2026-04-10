@@ -1,0 +1,11 @@
+.header { display: flex; flex-direction: column; gap: 3px; }
+.title { font-size: 20px; font-weight: 600; }
+.sub { font-size: 13px; color: var(--text-2); }
+.formCard { max-width: 480px; }
+.form { display: flex; flex-direction: column; gap: 16px; padding: 1.5rem; }
+.error { font-size: 12px; color: var(--red-600); background: var(--red-50); padding: 9px 12px; border-radius: var(--radius); }
+.actions { display: flex; gap: 10px; justify-content: flex-end; padding-top: 8px; }
+.successBox { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 4rem 2rem; text-align: center; max-width: 400px; margin: 0 auto; }
+.successIcon { font-size: 48px; }
+.successBox h2 { font-size: 20px; font-weight: 600; }
+.successBox p { font-size: 14px; color: var(--text-2); line-height: 1.6; }

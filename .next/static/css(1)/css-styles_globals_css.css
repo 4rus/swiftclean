@@ -1,0 +1,51 @@
+/*!****************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[12].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[12].use[3]!./styles/globals.css ***!
+  \****************************************************************************************************************************************************************************************************************************************************************/
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=DM+Mono:wght@400;500&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --font: 'DM Sans', sans-serif;
+  --font-mono: 'DM Mono', monospace;
+  --teal-50: #E1F5EE; --teal-100: #9FE1CB;
+  --teal-400: #1D9E75; --teal-600: #0F6E56; --teal-800: #085041;
+  --blue-50: #E6F1FB; --blue-400: #378ADD; --blue-600: #185FA5;
+  --amber-50: #FAEEDA; --amber-400: #EF9F27; --amber-600: #854F0B;
+  --green-50: #EAF3DE; --green-400: #639922; --green-600: #3B6D11;
+  --red-50: #FCEBEB; --red-400: #E24B4A; --red-600: #A32D2D;
+  --gray-50: #F8F8F6; --gray-100: #F0EFEA; --gray-200: #DDDCDA;
+  --gray-300: #C4C3C0; --gray-400: #888780; --gray-600: #5F5E5A; --gray-900: #1A1A18;
+  --bg: #F4F3F0; --surface: #FFFFFF;
+  --border: rgba(0,0,0,0.08); --border-md: rgba(0,0,0,0.14);
+  --text: #1A1A18; --text-2: #5F5E5A; --text-3: #888780;
+  --radius: 8px; --radius-lg: 12px; --radius-xl: 16px;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.07); --shadow: 0 2px 10px rgba(0,0,0,0.09);
+}
+
+html, body { font-family: var(--font); font-size: 14px; background: var(--bg); color: var(--text); line-height: 1.5; -webkit-font-smoothing: antialiased; }
+a { color: inherit; text-decoration: none; }
+button { font-family: var(--font); font-size: 13px; cursor: pointer; border: none; background: none; }
+input, select, textarea { font-family: var(--font); font-size: 13px; color: var(--text); background: var(--surface); border: 1px solid var(--border-md); border-radius: var(--radius); padding: 8px 11px; outline: none; transition: border-color 0.15s, box-shadow 0.15s; }
+input:focus, select:focus, textarea:focus { border-color: var(--teal-400); box-shadow: 0 0 0 3px rgba(29,158,117,0.12); }
+
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: var(--radius); font-size: 13px; font-weight: 500; border: 1px solid var(--border-md); background: var(--surface); color: var(--text); transition: background 0.12s; cursor: pointer; }
+.btn:hover { background: var(--gray-100); }
+.btn-primary { background: var(--teal-400); color: white; border-color: var(--teal-400); }
+.btn-primary:hover { background: var(--teal-600); border-color: var(--teal-600); }
+.btn-danger { background: var(--red-50); color: var(--red-600); border-color: transparent; }
+.btn-sm { padding: 5px 11px; font-size: 12px; }
+
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-sm); }
+
+.badge { display: inline-block; font-size: 11px; font-weight: 500; padding: 2px 9px; border-radius: 20px; }
+.badge-done     { background: var(--green-50); color: var(--green-600); }
+.badge-progress { background: var(--blue-50);  color: var(--blue-600); }
+.badge-pending  { background: var(--amber-50); color: var(--amber-600); }
+.badge-manager  { background: var(--teal-50);  color: var(--teal-600); }
+.badge-employee { background: var(--gray-100); color: var(--gray-600); }
+
+.field { display: flex; flex-direction: column; gap: 5px; }
+.field label { font-size: 12px; font-weight: 500; color: var(--text-2); }
+.field input, .field select, .field textarea { width: 100%; }
+
