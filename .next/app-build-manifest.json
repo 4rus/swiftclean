@@ -11,23 +11,35 @@
       "static/css/css-styles_globals_css.css",
       "static/chunks/app/layout.js"
     ],
+    "/login/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/css-app_login_login_module_css.css",
+      "static/chunks/app/login/page.js"
+    ],
     "/dashboard/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/css-app_checklist_checklist_module_css-app_dashboard_dashboard_module_css-app_photos_photos_m-8f0dd7.css",
+      "static/css/css-app_applications_applications_module_css-app_dashboard_dashboard_module_css-components_La-5242a2.css",
       "static/chunks/app/dashboard/page.js"
     ],
-    "/checklist/page": [
+    "/applications/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/css-app_checklist_checklist_module_css-app_dashboard_dashboard_module_css-app_photos_photos_m-8f0dd7.css",
-      "static/chunks/app/checklist/page.js"
+      "static/css/css-app_applications_applications_module_css-app_dashboard_dashboard_module_css-components_La-5242a2.css",
+      "static/chunks/app/applications/page.js"
     ],
-    "/photos/page": [
+    "/careers/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/css-app_checklist_checklist_module_css-app_dashboard_dashboard_module_css-app_photos_photos_m-8f0dd7.css",
-      "static/chunks/app/photos/page.js"
+      "static/css/css-app_careers_careers_module_css.css",
+      "static/chunks/app/careers/page.js"
+    ],
+    "/privacy/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/css-app_privacy_privacy_module_css.css",
+      "static/chunks/app/privacy/page.js"
     ]
   }
 }

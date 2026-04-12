@@ -320,7 +320,10 @@ export default function CareersPage() {
         <button type="submit" className={styles.submitBtn} disabled={saving}>
           {saving ? 'Submitting…' : 'Submit application →'}
         </button>
-        <p className={styles.footNote}>By submitting you agree that INDIMOE Cleaning may store and use this information for hiring purposes.</p>
+        <p className={styles.footNote}>
+  By submitting you agree that INDIMOE Cleaning may store and use this information for hiring purposes.{' '}
+  <a href="/privacy" target="_blank" style={{color:'var(--teal-600)', fontWeight:500}}>Privacy Policy</a>
+  </p>
       </form>
     </div>
   )
