@@ -5,6 +5,21 @@ import styles from './careers.module.css'
 
 const DAYS = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
 
+const CANADA_STATUSES = [
+  { value: 'citizen',           label: 'Canadian Citizen' },
+  { value: 'permanent_resident',label: 'Permanent Resident (PR)' },
+  { value: 'open_work_permit',  label: 'Open Work Permit' },
+  { value: 'employer_specific', label: 'Employer-Specific Work Permit' },
+  { value: 'student_with_work', label: 'Study Permit (with work authorization)' },
+  { value: 'pgwp',              label: 'Post-Graduation Work Permit (PGWP)' },
+  { value: 'spousal_owp',       label: 'Spousal/Common-Law Open Work Permit' },
+  { value: 'bridging_permit',   label: 'Bridging Open Work Permit (BOWP)' },
+  { value: 'refugee_claimant',  label: 'Refugee Claimant / Protected Person' },
+  { value: 'temporary_resident',label: 'Temporary Resident Permit (TRP)' },
+  { value: 'international_mobility', label: 'International Mobility Program (IMP)' },
+  { value: 'other',             label: 'Other / Not listed' },
+]
+
 export default function CareersPage() {
   const supabase = createClient()
 
@@ -12,6 +27,7 @@ export default function CareersPage() {
   const [saving, setSaving]   = useState(false)
   const [error, setError]     = useState('')
   const [resumeFile, setResumeFile] = useState(null)
+  const [photoFiles, setPhotoFiles] = useState([]) // NEW
 
   const [form, setForm] = useState({
     // Personal
@@ -26,6 +42,9 @@ export default function CareersPage() {
     has_drivers_licence: '',
     // SIN
     sin_number: '',
+    // Status in Canada — NEW
+    canada_status: '',
+    canada_status_expiry: '',
     // Emergency contact
     emergency_name: '', emergency_phone: '', emergency_relation: '',
     // References
@@ -44,6 +63,19 @@ export default function CareersPage() {
         ? f.available_days.filter(d => d !== day)
         : [...f.available_days, day]
     }))
+  }
+
+  // NEW — handle photo file selection (up to 5 photos)
+  function handlePhotoChange(e) {
+    const selected = Array.from(e.target.files || [])
+    setPhotoFiles(prev => {
+      const combined = [...prev, ...selected]
+      return combined.slice(0, 5) // cap at 5
+    })
+  }
+
+  function removePhoto(index) {
+    setPhotoFiles(prev => prev.filter((_, i) => i !== index))
   }
 
   async function handleSubmit(e) {
@@ -69,29 +101,43 @@ export default function CareersPage() {
       resume_path = path
     }
 
+    // Upload photos if provided — NEW
+    const photo_paths = []
+    for (let i = 0; i < photoFiles.length; i++) {
+      const file = photoFiles[i]
+      const ext  = file.name.split('.').pop()
+      const path = `photos/${Date.now()}_${i}_${form.full_name.replace(/\s+/g,'_')}.${ext}`
+      const { error: phErr } = await supabase.storage.from('job-applications').upload(path, file)
+      if (phErr) { setError('Photo upload failed: ' + phErr.message); setSaving(false); return }
+      photo_paths.push(path)
+    }
+
     const { error: dbErr } = await supabase.from('job_applications').insert({
-      full_name:           form.full_name,
-      email:               form.email,
-      phone:               form.phone,
-      city:                form.city,
-      available_days:      form.available_days,
-      available_hours:     form.available_hours,
-      start_date:          form.start_date || null,
-      work_experience:     form.work_experience,
-      has_drivers_licence: form.has_drivers_licence === 'yes',
-      sin_number:          form.sin_number,
-      emergency_name:      form.emergency_name,
-      emergency_phone:     form.emergency_phone,
-      emergency_relation:  form.emergency_relation,
-      ref1_name:           form.ref1_name,
-      ref1_phone:          form.ref1_phone,
-      ref1_relation:       form.ref1_relation,
-      ref2_name:           form.ref2_name,
-      ref2_phone:          form.ref2_phone,
-      ref2_relation:       form.ref2_relation,
-      cover_note:          form.cover_note,
+      full_name:             form.full_name,
+      email:                 form.email,
+      phone:                 form.phone,
+      city:                  form.city,
+      available_days:        form.available_days,
+      available_hours:       form.available_hours,
+      start_date:            form.start_date || null,
+      work_experience:       form.work_experience,
+      has_drivers_licence:   form.has_drivers_licence === 'yes',
+      sin_number:            form.sin_number,
+      canada_status:         form.canada_status,         // NEW
+      canada_status_expiry:  form.canada_status_expiry || null, // NEW
+      emergency_name:        form.emergency_name,
+      emergency_phone:       form.emergency_phone,
+      emergency_relation:    form.emergency_relation,
+      ref1_name:             form.ref1_name,
+      ref1_phone:            form.ref1_phone,
+      ref1_relation:         form.ref1_relation,
+      ref2_name:             form.ref2_name,
+      ref2_phone:            form.ref2_phone,
+      ref2_relation:         form.ref2_relation,
+      cover_note:            form.cover_note,
       resume_path,
-      status:              'new',
+      photo_paths,           // NEW
+      status:                'new',
     })
 
     if (dbErr) { setError('Submission failed: ' + dbErr.message); setSaving(false); return }
@@ -112,6 +158,9 @@ export default function CareersPage() {
       </div>
     </div>
   )
+
+  // Statuses that have an expiry date (i.e. not citizens)
+  const showExpiry = form.canada_status && form.canada_status !== 'citizen'
 
   return (
     <div className={styles.wrap}>
@@ -177,10 +226,7 @@ export default function CareersPage() {
               <label>Preferred hours</label>
               <select value={form.available_hours} onChange={e=>setF('available_hours',e.target.value)}>
                 <option value="">Select…</option>
-                <option>Morning (6am – 12pm)</option>
-                <option>Afternoon (12pm – 6pm)</option>
-                <option>Evening (6pm – 10pm)</option>
-                <option>Any / Flexible</option>
+                <option>Morning (10:00 PM – 6:00 AM)</option>
               </select>
             </div>
             <div className="field">
@@ -251,10 +297,127 @@ export default function CareersPage() {
           <p className={styles.privacyNote}>🔒 Your SIN is stored securely and only visible to the hiring manager.</p>
         </div>
 
-        {/* Section 6 — Emergency contact */}
+        {/* ── Section 6 — Status in Canada (NEW) ── */}
         <div className={styles.section}>
           <div className={styles.sectionHead}>
             <span className={styles.sectionNum}>6</span>
+            <div>
+              <div className={styles.sectionTitle}>Status in Canada</div>
+              <div className={styles.sectionSub}>Select your current immigration / work authorization status</div>
+            </div>
+          </div>
+
+          <div className={styles.statusGrid}>
+            {CANADA_STATUSES.map(({ value, label }) => (
+              <label
+                key={value}
+                className={`${styles.statusCard} ${form.canada_status === value ? styles.statusSelected : ''}`}
+              >
+                <input
+                  type="radio"
+                  name="canada_status"
+                  value={value}
+                  checked={form.canada_status === value}
+                  onChange={() => setF('canada_status', value)}
+                />
+                <span>{label}</span>
+              </label>
+            ))}
+          </div>
+
+          {showExpiry && (
+            <div className="field" style={{maxWidth: 260, marginTop: 4}}>
+              <label>Permit / status expiry date <span className={styles.optionalTag}>(optional)</span></label>
+              <input
+                type="date"
+                value={form.canada_status_expiry}
+                onChange={e => setF('canada_status_expiry', e.target.value)}
+              />
+            </div>
+          )}
+
+          {/* ── Status document photos — inline under Canada status ── */}
+          <div className={styles.statusPhotoBlock}>
+            <div className={styles.statusPhotoLabel}>
+              📎 Upload a photo of your status document
+              <span className={styles.optionalTag}>(optional — up to 5 images)</span>
+            </div>
+
+            {/* Two big tap buttons: Camera or Upload */}
+            {photoFiles.length < 5 && (
+              <div className={styles.photoBtnRow}>
+                {/* Take photo with camera */}
+                <label className={styles.photoActionBtn}>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    capture="environment"
+                    style={{display:'none'}}
+                    onChange={handlePhotoChange}
+                  />
+                  <span className={styles.photoActionIcon}>📷</span>
+                  <span className={styles.photoActionText}>Take photo</span>
+                  <span className={styles.photoActionSub}>Use camera</span>
+                </label>
+
+                {/* Upload from gallery / files */}
+                <label className={styles.photoActionBtn}>
+                  <input
+                    type="file"
+                    accept="image/png,image/jpeg,image/jpg,image/webp,image/heic"
+                    multiple
+                    style={{display:'none'}}
+                    onChange={handlePhotoChange}
+                  />
+                  <span className={styles.photoActionIcon}>🖼️</span>
+                  <span className={styles.photoActionText}>Upload file</span>
+                  <span className={styles.photoActionSub}>Gallery or files</span>
+                </label>
+              </div>
+            )}
+
+            {/* Thumbnails */}
+            {photoFiles.length > 0 && (
+              <div className={styles.photoGrid}>
+                {photoFiles.map((file, i) => {
+                  const url = URL.createObjectURL(file)
+                  return (
+                    <div key={i} className={styles.photoThumb}>
+                      <img src={url} alt={`Photo ${i + 1}`} className={styles.photoImg} />
+                      <button
+                        type="button"
+                        className={styles.photoRemove}
+                        onClick={() => removePhoto(i)}
+                        aria-label="Remove photo"
+                      >✕</button>
+                      <div className={styles.photoLabel}>{file.name.length > 18 ? file.name.slice(0,15)+'…' : file.name}</div>
+                    </div>
+                  )
+                })}
+                {photoFiles.length < 5 && (
+                  <label className={styles.photoAddMore}>
+                    <input
+                      type="file"
+                      accept="image/png,image/jpeg,image/jpg,image/webp,image/heic"
+                      multiple
+                      style={{display:'none'}}
+                      onChange={handlePhotoChange}
+                    />
+                    <span className={styles.photoAddIcon}>＋</span>
+                    <span className={styles.photoAddText}>Add more</span>
+                  </label>
+                )}
+              </div>
+            )}
+          </div>
+
+          <p className={styles.privacyNote}>🔒 This information and any photos are kept confidential and used only for employment eligibility purposes.</p>
+        </div>
+
+        {/* Section 7 — Emergency contact (renumbered) */}
+        <div className={styles.section}>
+          <div className={styles.sectionHead}>
+            <span className={styles.sectionNum}>7</span>
             <div>
               <div className={styles.sectionTitle}>Emergency Contact</div>
               <div className={styles.sectionSub}>Someone we can reach in an emergency</div>
@@ -267,10 +430,10 @@ export default function CareersPage() {
           </div>
         </div>
 
-        {/* Section 7 — References */}
+        {/* Section 8 — References (renumbered) */}
         <div className={styles.section}>
           <div className={styles.sectionHead}>
-            <span className={styles.sectionNum}>7</span>
+            <span className={styles.sectionNum}>8</span>
             <div>
               <div className={styles.sectionTitle}>References</div>
               <div className={styles.sectionSub}>Two people who can vouch for you (not family)</div>
@@ -294,10 +457,10 @@ export default function CareersPage() {
           </div>
         </div>
 
-        {/* Section 8 — Resume */}
+        {/* Section 9 — Resume (renumbered) */}
         <div className={styles.section}>
           <div className={styles.sectionHead}>
-            <span className={styles.sectionNum}>8</span>
+            <span className={styles.sectionNum}>9</span>
             <div>
               <div className={styles.sectionTitle}>Resume</div>
               <div className={styles.sectionSub}>Upload your resume (PDF or Word — optional)</div>
@@ -313,10 +476,10 @@ export default function CareersPage() {
           </label>
         </div>
 
-        {/* Section 9 — Cover note */}
+        {/* Section 10 — Cover note */}
         <div className={styles.section}>
           <div className={styles.sectionHead}>
-            <span className={styles.sectionNum}>9</span>
+            <span className={styles.sectionNum}>10</span>
             <div>
               <div className={styles.sectionTitle}>Anything else?</div>
               <div className={styles.sectionSub}>Optional — tell us why you'd be a great fit</div>

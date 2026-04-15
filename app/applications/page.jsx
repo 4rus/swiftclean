@@ -112,10 +112,11 @@ export default function ApplicationsPage() {
                   <div className={styles.appName}>{app.full_name}</div>
                   <div className={styles.appMeta}>{app.email} · {app.phone}</div>
                   <div className={styles.appMeta2}>
-                    {app.available_days?.slice(0,3).join(', ')}{app.available_days?.length > 3 ? '…' : ''}
-                    {app.has_drivers_licence ? ' · 🚗 Licence' : ''}
-                    {app.resume_path ? ' · 📄 Resume' : ''}
-                  </div>
+                  {app.canada_status ? `🇨🇦 ${app.canada_status} · ` : ''}
+                  {app.available_days?.slice(0,3).join(', ')}{app.available_days?.length > 3 ? '…' : ''}
+                  {app.has_drivers_licence ? ' · 🚗 Licence' : ''}
+                  {app.resume_path ? ' · 📄 Resume' : ''}
+                </div>
                 </div>
                 <div className={styles.appRight}>
                   <span className={`${styles.statusPill} ${cls}`}>{label}</span>

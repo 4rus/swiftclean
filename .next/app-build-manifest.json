@@ -20,39 +20,14 @@
     "/dashboard/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/css-app_applications_applications_module_css-app_checklist_checklist_module_css-app_dashboard-a90da2.css",
+      "static/css/css-app_applications_applications_module_css-app_dashboard_dashboard_module_css-components_La-5242a2.css",
       "static/chunks/app/dashboard/page.js"
     ],
     "/applications/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/css-app_applications_applications_module_css-app_checklist_checklist_module_css-app_dashboard-a90da2.css",
+      "static/css/css-app_applications_applications_module_css-app_dashboard_dashboard_module_css-components_La-5242a2.css",
       "static/chunks/app/applications/page.js"
-    ],
-    "/activity/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-app_activity_activity_module_css.css",
-      "static/css/css-app_applications_applications_module_css-app_checklist_checklist_module_css-app_dashboard-a90da2.css",
-      "static/chunks/app/activity/page.js"
-    ],
-    "/photos/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-app_applications_applications_module_css-app_checklist_checklist_module_css-app_dashboard-a90da2.css",
-      "static/chunks/app/photos/page.js"
-    ],
-    "/checklist/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-app_applications_applications_module_css-app_checklist_checklist_module_css-app_dashboard-a90da2.css",
-      "static/chunks/app/checklist/page.js"
-    ],
-    "/invoices/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-app_applications_applications_module_css-app_checklist_checklist_module_css-app_dashboard-a90da2.css",
-      "static/chunks/app/invoices/page.js"
     ],
     "/careers/page": [
       "static/chunks/webpack.js",
@@ -64,8 +39,15 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/css/css-app_stores_stores_module_css.css",
-      "static/css/css-app_applications_applications_module_css-app_checklist_checklist_module_css-app_dashboard-a90da2.css",
+      "static/css/css-app_applications_applications_module_css-app_dashboard_dashboard_module_css-components_La-5242a2.css",
       "static/chunks/app/stores/page.js"
+    ],
+    "/employees/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/css-app_employees_employees_module_css.css",
+      "static/css/css-app_applications_applications_module_css-app_dashboard_dashboard_module_css-components_La-5242a2.css",
+      "static/chunks/app/employees/page.js"
     ]
   }
 }

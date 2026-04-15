@@ -78,6 +78,24 @@
 .radioCard input[type="radio"] { accent-color: var(--teal-400); width: 16px; height: 16px; }
 .radioSelected { border-color: var(--teal-400); background: var(--teal-50); color: var(--teal-600); font-weight: 500; }
 
+/* ── Status in Canada grid ── */
+.statusGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.statusCard {
+  display: flex; align-items: center; gap: 9px;
+  padding: 10px 13px; border-radius: var(--radius);
+  border: 1.5px solid var(--border-md); cursor: pointer;
+  font-size: 13px; line-height: 1.4; transition: all 0.12s;
+}
+.statusCard:hover { border-color: var(--teal-400); background: var(--teal-50); }
+.statusCard input[type="radio"] { accent-color: var(--teal-400); width: 15px; height: 15px; flex-shrink: 0; }
+.statusSelected { border-color: var(--teal-400); background: var(--teal-50); color: var(--teal-600); font-weight: 500; }
+
+.optionalTag { font-size: 11px; color: var(--text-3); font-weight: 400; margin-left: 4px; }
+
 /* References */
 .refBlock { display: flex; flex-direction: column; gap: 10px; }
 .refLabel { font-size: 12px; font-weight: 600; color: var(--text-2); text-transform: uppercase; letter-spacing: 0.04em; }
@@ -93,6 +111,76 @@
 .uploadText { font-size: 13px; font-weight: 500; }
 .uploadSub { font-size: 12px; color: var(--text-3); }
 .uploadName { font-size: 13px; font-weight: 500; color: var(--teal-600); }
+
+/* ── Status document photo upload (inside Canada status section) ── */
+.statusPhotoBlock {
+  display: flex; flex-direction: column; gap: 12px;
+  padding: 14px 16px;
+  background: var(--bg);
+  border: 1.5px dashed var(--border-md);
+  border-radius: var(--radius-lg);
+}
+.statusPhotoLabel {
+  font-size: 13px; font-weight: 600; color: var(--text-1);
+  display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+}
+
+/* Two big action buttons: Take photo / Upload */
+.photoBtnRow {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+}
+.photoActionBtn {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 5px; padding: 18px 10px;
+  border: 1.5px solid var(--border-md); border-radius: var(--radius-lg);
+  background: var(--surface); cursor: pointer; transition: all 0.12s;
+  text-align: center;
+}
+.photoActionBtn:hover { border-color: var(--teal-400); background: var(--teal-50); }
+.photoActionIcon { font-size: 26px; line-height: 1; }
+.photoActionText { font-size: 13px; font-weight: 600; color: var(--text-1); }
+.photoActionSub { font-size: 11px; color: var(--text-3); }
+
+/* ── Photo grid ── */
+.photoGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 10px;
+}
+.photoThumb {
+  position: relative;
+  border-radius: var(--radius);
+  border: 1.5px solid var(--border-md);
+  overflow: hidden;
+  background: var(--bg);
+  display: flex; flex-direction: column;
+}
+.photoImg {
+  width: 100%; aspect-ratio: 1 / 1;
+  object-fit: cover; display: block;
+}
+.photoRemove {
+  position: absolute; top: 5px; right: 5px;
+  width: 22px; height: 22px; border-radius: 50%;
+  background: rgba(0,0,0,0.55); color: white;
+  border: none; font-size: 11px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  line-height: 1; transition: background 0.12s;
+}
+.photoRemove:hover { background: var(--red-600); }
+.photoLabel {
+  font-size: 10px; color: var(--text-3); padding: 4px 6px;
+  text-overflow: ellipsis; overflow: hidden; white-space: nowrap;
+}
+.photoAddMore {
+  border: 2px dashed var(--border-md); border-radius: var(--radius);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 4px; cursor: pointer; aspect-ratio: 1 / 1;
+  min-height: 80px; transition: all 0.12s;
+}
+.photoAddMore:hover { border-color: var(--teal-400); background: var(--teal-50); }
+.photoAddIcon { font-size: 22px; color: var(--text-3); }
+.photoAddText { font-size: 11px; color: var(--text-3); }
 
 .privacyNote { font-size: 12px; color: var(--text-3); }
 
@@ -125,5 +213,6 @@
 .successSub { font-size: 12px; color: var(--text-3); }
 
 @media (max-width: 600px) {
-  .grid2, .grid3 { grid-template-columns: 1fr; }
+  .grid2, .grid3, .statusGrid { grid-template-columns: 1fr; }
+  .photoGrid { grid-template-columns: repeat(3, 1fr); }
 }
