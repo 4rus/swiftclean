@@ -5,26 +5,24 @@ import styles from './dashboard.module.css'
 
 export default async function DashboardPage() {
   const supabase = createServerSupabase()
-  const { data: { user } } = await supabase.auth.getUser()
-if (!user) redirect('/login')
+  const { data: { session } } = await supabase.auth.getSession()
+  if (!session) redirect('/login')
 
-const { data: profile } = await supabase
-  .from('profiles').select('*, store:stores(*)').eq('id', user.id).single()
+  const { data: profile } = await supabase
+    .from('profiles').select('*, store:stores(*)').eq('id', session.user.id).single()
+
   const isManager = profile?.role === 'manager'
   const today = new Date(); today.setHours(0,0,0,0)
-  console.log('PROFILE:', JSON.stringify(profile))
 
   let jobsQ = supabase.from('jobs').select('*, store:stores(name)').gte('scheduled_time', today.toISOString())
   if (!isManager) jobsQ = jobsQ.eq('store_id', profile?.store_id)
-  const { data: todayJobsRaw } = await jobsQ
-  const todayJobs = todayJobsRaw || []
+  const { data: todayJobs = [] } = await jobsQ
 
   const done = todayJobs.filter(j => j.status === 'done').length
   const inProg = todayJobs.filter(j => j.status === 'in_progress').length
   const { count: photoCount } = await supabase.from('photos').select('*', { count: 'exact', head: true }).gte('created_at', today.toISOString())
 
-  const { data: invoicesRaw } = await supabase.from('invoices').select('id').eq('store_id', profile?.store_id)
-  const invoices = invoicesRaw || []
+  const { data: invoices = [] } = await supabase.from('invoices').select('id').eq('store_id', profile?.store_id)
 
   return (
     <Layout profile={profile} store={profile?.store}>

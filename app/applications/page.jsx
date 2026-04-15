@@ -37,9 +37,9 @@ export default function ApplicationsPage() {
   useEffect(() => { loadData() }, [])
 
   async function loadData() {
-    const { data: { user } } = await supabase.auth.getUser()
-if (!user) return
-    const { data: p } = await supabase.from('profiles').select('*, store:stores(*)').eq('id', user.id).single()
+    const { data: { session } } = await supabase.auth.getSession()
+    if (!session) { router.push('/login'); return }
+    const { data: p } = await supabase.from('profiles').select('*, store:stores(*)').eq('id', session.user.id).single()
     if (p?.role !== 'manager') { router.push('/dashboard'); return }
     setProfile(p); setStore(p?.store)
 
@@ -185,10 +185,11 @@ if (!user) return
 
               {/* Driver's licence + SIN */}
               <div className={styles.detailSection}>
-                <div className={styles.detailLabel}>Details</div>
-                <div className={styles.detailText}>🚗 Driver's licence: <strong>{selected.has_drivers_licence ? 'Yes' : 'No'}</strong></div>
-                {selected.sin_number && <div className={styles.detailText}>🔒 SIN: <strong>{selected.sin_number}</strong></div>}
-              </div>
+  <div className={styles.detailLabel}>Details</div>
+  {selected.canada_status && <div className={styles.detailText}>🇨🇦 Status in Canada: <strong>{selected.canada_status}</strong></div>}
+  <div className={styles.detailText}>🚗 Driver's licence: <strong>{selected.has_drivers_licence ? 'Yes' : 'No'}</strong></div>
+  {selected.sin_number && <div className={styles.detailText}>🔒 SIN: <strong>{selected.sin_number}</strong></div>}
+</div>
 
               {/* Emergency contact */}
               {selected.emergency_name && (

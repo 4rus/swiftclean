@@ -41,33 +41,15 @@ export default function InvoicesPage() {
   useEffect(() => { loadData() }, [])
 
   async function loadData() {
-  const { data: { user } } = await supabase.auth.getUser()
-if (!user) return
-
-  const { data: p } = await supabase
-    .from('profiles')
-    .select('*, store:stores(*)')
-    .eq('id', user.id)
-    .single()
-
-  setProfile(p)
-  setStore(p?.store)
-
-  const { data: inv } = await supabase
-    .from('invoices')
-    .select('*')
-    .eq('store_id', p?.store_id)
-    .order('created_at', { ascending: false })
-
-  const list = inv || []
-  setInvoices(list)
-
-  setForm(f => ({
-    ...f,
-    invoiceNumber: genNum(list),
-    clientAddress: STORE_CLIENTS[p?.store?.name]?.address || ''
-  }))
-}
+    const { data: { session } } = await supabase.auth.getSession()
+    if (!session) return
+    const { data: p } = await supabase.from('profiles').select('*, store:stores(*)').eq('id', session.user.id).single()
+    setProfile(p); setStore(p?.store)
+    const { data: inv } = await supabase.from('invoices').select('*').eq('store_id', p?.store_id).order('created_at', { ascending: false })
+    const list = inv || []
+    setInvoices(list)
+    setForm(f => ({ ...f, invoiceNumber: genNum(list), clientAddress: STORE_CLIENTS[p?.store?.name]?.address || '' }))
+  }
 
   function setF(key, val) { setForm(f => ({ ...f, [key]: val })) }
 
@@ -135,11 +117,12 @@ if (!user) return
             <span className={styles.sectionTitle}>New Invoice / Nouvelle Facture</span>
           </div>
 
+          {/* Mini invoice header preview */}
           <div className={styles.invoicePreview}>
             <div>
               <div className={styles.companyName}>{COMPANY.name}</div>
               <div className={styles.companyMeta}>{COMPANY.address}</div>
-              <div className={styles.companyMeta}>Cell: {COMPANY.cell} · {COMPANY.email}</div>
+              <div className={styles.companyMeta}>Cell: {COMPANY.cell} &nbsp;·&nbsp; {COMPANY.email}</div>
             </div>
             <div style={{textAlign:'right'}}>
               <div className={styles.invBigTitle}>INVOICE / FACTURE</div>
@@ -152,11 +135,11 @@ if (!user) return
           <div className={styles.formGrid}>
             <div className="field">
               <label>Sold To / Vendu à *</label>
-              <input value={form.clientName} onChange={e => setF('clientName', e.target.value)} />
+              <input placeholder="e.g. Swiss Chalet" value={form.clientName} onChange={e => setF('clientName', e.target.value)} />
             </div>
             <div className="field">
               <label>P.O. / Bon de commande</label>
-              <input value={form.poNumber} onChange={e => setF('poNumber', e.target.value)} />
+              <input placeholder="Optional" value={form.poNumber} onChange={e => setF('poNumber', e.target.value)} />
             </div>
             <div className="field" style={{gridColumn:'1/-1'}}>
               <label>Client Address / Adresse</label>
@@ -172,7 +155,7 @@ if (!user) return
             </div>
             <div className="field">
               <label>Unit Price / Prix unitaire ($)</label>
-              <input type="number" value={form.unitPrice} onChange={e => setF('unitPrice', e.target.value)} />
+              <input type="number" min="0" step="0.01" placeholder="0.00" value={form.unitPrice} onChange={e => setF('unitPrice', e.target.value)} />
             </div>
           </div>
 
@@ -205,14 +188,20 @@ if (!user) return
             <tr><th>Invoice #</th><th>Date</th><th>Client</th><th>Services</th><th>Total</th><th></th></tr>
           </thead>
           <tbody>
+            {invoices.length === 0 && (
+              <tr><td colSpan={6} className={styles.empty}>No invoices yet — create your first one above.</td></tr>
+            )}
             {invoices.map(inv => (
               <tr key={inv.id}>
-                <td>{inv.invoice_number}</td>
-                <td>{new Date(inv.invoice_date).toLocaleDateString('en-CA')}</td>
-                <td>{inv.client_name}</td>
-                <td>{inv.description}</td>
-                <td>${Number(inv.total).toFixed(2)}</td>
-                <td><button onClick={() => downloadPDF(inv)}>PDF</button></td>
+                <td className={styles.invNum}>{inv.invoice_number}</td>
+                <td style={{fontSize:12,color:'var(--text-2)'}}>{new Date(inv.invoice_date).toLocaleDateString('en-CA')}</td>
+                <td>
+                  <div style={{fontWeight:500}}>{inv.client_name}</div>
+                  <div style={{fontSize:11,color:'var(--text-3)'}}>{inv.client_address}</div>
+                </td>
+                <td style={{fontSize:12,color:'var(--text-2)',maxWidth:160}}>{inv.description}</td>
+                <td style={{fontWeight:600,color:'var(--teal-600)'}}>${Number(inv.total).toFixed(2)}</td>
+                <td><button className="btn btn-sm" onClick={() => downloadPDF(inv)} disabled={busy}>⬇ PDF</button></td>
               </tr>
             ))}
           </tbody>

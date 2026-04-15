@@ -8,21 +8,30 @@ const DAYS = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sun
 export default function CareersPage() {
   const supabase = createClient()
 
-  const [step, setStep]       = useState(1)
+  const [step, setStep]       = useState(1) // 1 = form, 2 = success
   const [saving, setSaving]   = useState(false)
   const [error, setError]     = useState('')
-  const [resumeFile, setResumeFile]   = useState(null)
-  const [licenceFile, setLicenceFile] = useState(null)
+  const [resumeFile, setResumeFile] = useState(null)
 
   const [form, setForm] = useState({
+    // Personal
     full_name: '', email: '', phone: '', city: '',
+    // Availability
     available_days: [],
+    available_hours: '',
+    start_date: '',
+    // Work experience
     work_experience: '',
+    // Driver's licence
     has_drivers_licence: '',
+    // SIN
     sin_number: '',
+    // Emergency contact
     emergency_name: '', emergency_phone: '', emergency_relation: '',
+    // References
     ref1_name: '', ref1_phone: '', ref1_relation: '',
     ref2_name: '', ref2_phone: '', ref2_relation: '',
+    // Extra
     cover_note: '',
   })
 
@@ -50,8 +59,8 @@ export default function CareersPage() {
     setSaving(true); setError('')
 
     let resume_path = null
-    let licence_path = null
 
+    // Upload resume if provided
     if (resumeFile) {
       const ext = resumeFile.name.split('.').pop()
       const path = `resumes/${Date.now()}_${form.full_name.replace(/\s+/g,'_')}.${ext}`
@@ -60,20 +69,14 @@ export default function CareersPage() {
       resume_path = path
     }
 
-    if (licenceFile && form.has_drivers_licence === 'yes') {
-      const ext = licenceFile.name.split('.').pop()
-      const path = `licences/${Date.now()}_${form.full_name.replace(/\s+/g,'_')}.${ext}`
-      const { error: licErr } = await supabase.storage.from('job-applications').upload(path, licenceFile)
-      if (!licErr) licence_path = path
-    }
-
     const { error: dbErr } = await supabase.from('job_applications').insert({
       full_name:           form.full_name,
       email:               form.email,
       phone:               form.phone,
       city:                form.city,
       available_days:      form.available_days,
-      available_hours:     '10:00 PM – 6:00 AM',
+      available_hours:     form.available_hours,
+      start_date:          form.start_date || null,
       work_experience:     form.work_experience,
       has_drivers_licence: form.has_drivers_licence === 'yes',
       sin_number:          form.sin_number,
@@ -88,7 +91,6 @@ export default function CareersPage() {
       ref2_relation:       form.ref2_relation,
       cover_note:          form.cover_note,
       resume_path,
-      licence_path,
       status:              'new',
     })
 
@@ -113,6 +115,7 @@ export default function CareersPage() {
 
   return (
     <div className={styles.wrap}>
+      {/* Header */}
       <div className={styles.hero}>
         <div className={styles.heroLogo}>✦</div>
         <h1 className={styles.heroTitle}>Join INDIMOE Cleaning</h1>
@@ -122,7 +125,7 @@ export default function CareersPage() {
         </p>
         <div className={styles.heroBadges}>
           <span className={styles.heroBadge}>📍 Calgary, AB</span>
-          <span className={styles.heroBadge}>🌙 10 PM – 6 AM shifts</span>
+          <span className={styles.heroBadge}>🕐 Flexible hours</span>
           <span className={styles.heroBadge}>💼 Multiple locations</span>
         </div>
       </div>
@@ -152,10 +155,10 @@ export default function CareersPage() {
             <span className={styles.sectionNum}>2</span>
             <div>
               <div className={styles.sectionTitle}>Availability</div>
-              <div className={styles.sectionSub}>Select all days you can work (10 PM – 6 AM shifts)</div>
+              <div className={styles.sectionSub}>When can you work?</div>
             </div>
           </div>
-          <div className="field">
+          <div className="field" style={{marginBottom:14}}>
             <label>Available days</label>
             <div className={styles.dayGrid}>
               {DAYS.map(day => (
@@ -167,6 +170,22 @@ export default function CareersPage() {
                   {day.slice(0,3)}
                 </button>
               ))}
+            </div>
+          </div>
+          <div className={styles.grid2}>
+            <div className="field">
+              <label>Preferred hours</label>
+              <select value={form.available_hours} onChange={e=>setF('available_hours',e.target.value)}>
+                <option value="">Select…</option>
+                <option>Morning (6am – 12pm)</option>
+                <option>Afternoon (12pm – 6pm)</option>
+                <option>Evening (6pm – 10pm)</option>
+                <option>Any / Flexible</option>
+              </select>
+            </div>
+            <div className="field">
+              <label>Earliest start date</label>
+              <input type="date" value={form.start_date} onChange={e=>setF('start_date',e.target.value)} />
             </div>
           </div>
         </div>
@@ -181,6 +200,7 @@ export default function CareersPage() {
             </div>
           </div>
           <div className="field">
+            <label>Describe your experience</label>
             <textarea
               value={form.work_experience}
               onChange={e=>setF('work_experience',e.target.value)}
@@ -208,19 +228,6 @@ export default function CareersPage() {
               </label>
             ))}
           </div>
-          {form.has_drivers_licence === 'yes' && (
-            <div className="field" style={{marginTop:8}}>
-              <label>Upload a photo of your licence</label>
-              <label className={styles.uploadArea} style={{padding:'1rem'}}>
-                <input type="file" accept="image/*" style={{display:'none'}} onChange={e=>setLicenceFile(e.target.files?.[0]||null)} />
-                <div className={styles.uploadIcon}>🪪</div>
-                {licenceFile
-                  ? <div className={styles.uploadName}>{licenceFile.name}</div>
-                  : <><div className={styles.uploadText}>Tap to upload licence photo</div><div className={styles.uploadSub}>JPG or PNG</div></>
-                }
-              </label>
-            </div>
-          )}
         </div>
 
         {/* Section 5 — SIN */}
@@ -234,7 +241,12 @@ export default function CareersPage() {
           </div>
           <div className="field" style={{maxWidth:260}}>
             <label>SIN number</label>
-            <input value={form.sin_number} onChange={e=>setF('sin_number',e.target.value)} placeholder="123-456-789" maxLength={11} />
+            <input
+              value={form.sin_number}
+              onChange={e=>setF('sin_number',e.target.value)}
+              placeholder="123-456-789"
+              maxLength={11}
+            />
           </div>
           <p className={styles.privacyNote}>🔒 Your SIN is stored securely and only visible to the hiring manager.</p>
         </div>
@@ -320,10 +332,7 @@ export default function CareersPage() {
         <button type="submit" className={styles.submitBtn} disabled={saving}>
           {saving ? 'Submitting…' : 'Submit application →'}
         </button>
-        <p className={styles.footNote}>
-  By submitting you agree that INDIMOE Cleaning may store and use this information for hiring purposes.{' '}
-  <a href="/privacy" target="_blank" style={{color:'var(--teal-600)', fontWeight:500}}>Privacy Policy</a>
-  </p>
+        <p className={styles.footNote}>By submitting you agree that INDIMOE Cleaning may store and use this information for hiring purposes.</p>
       </form>
     </div>
   )

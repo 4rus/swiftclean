@@ -5,14 +5,6 @@
 .dashboard_title__m1iWF { font-size: 20px; font-weight: 600; }
 .dashboard_sub__V_ei1 { font-size: 13px; color: var(--text-2); }
 .dashboard_stats__XaKkw { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); grid-gap: 12px; gap: 12px; }
-
-@media (max-width: 768px) {
-  .dashboard_stats__XaKkw { grid-template-columns: 1fr 1fr; }
-  .dashboard_title__m1iWF { font-size: 18px; }
-  .dashboard_table__lF4T4 th { font-size: 10px; padding: 7px 0.75rem; }
-  .dashboard_table__lF4T4 td { padding: 9px 0.75rem; font-size: 12px; }
-  .dashboard_cardHead__1tTZa { padding: 0.75rem; }
-}
 .dashboard_statCard__YcX7f { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1rem 1.1rem; box-shadow: var(--shadow-sm); }
 .dashboard_statLabel__3j_RC { font-size: 11px; color: var(--text-2); font-weight: 500; text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 6px; }
 .dashboard_statValue__xOYXu { font-size: 28px; font-weight: 600; line-height: 1; }
@@ -56,26 +48,6 @@
 .Layout_teal__XiLoE { background: var(--teal-400); } .Layout_blue__y9_HN { background: var(--blue-400); } .Layout_green__QjhRG { background: var(--green-400); } .Layout_amber__wB2lk { background: var(--amber-400); }
 .Layout_main__bVVJR { flex: 1 1; padding: 1.5rem; display: flex; flex-direction: column; gap: 1.25rem; min-height: 0; }
 
-@media (max-width: 768px) {
-  .Layout_body__yYfab { flex-direction: column; }
-  .Layout_sidebar__x3OPI { width: 100%; height: auto; position: static; flex-direction: row; overflow-x: auto; overflow-y: hidden; padding: 0.4rem 0.5rem; border-right: none; border-bottom: 1px solid var(--border); gap: 4px; flex-wrap: nowrap; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
-  .Layout_sidebar__x3OPI::-webkit-scrollbar { display: none; }
-  .Layout_navSection__ojt7O { display: none; }
-  .Layout_navItem__0Yvho { white-space: nowrap; padding: 7px 14px; font-size: 12px; font-weight: 500; flex-shrink: 0; border-radius: 20px; }
-  .Layout_navItem__0Yvho.Layout_active___S4if { background: var(--teal-400); color: white; }
-  .Layout_dot__E17aR { display: none; }
-  .Layout_main__bVVJR { padding: 0.85rem; gap: 0.85rem; }
-  .Layout_topbar__uLobL { padding: 0 0.75rem; height: 48px; }
-  .Layout_logoBrand__U23X5 { display: none; }
-  .Layout_logoText__LSJWt { font-size: 14px; }
-  .Layout_logoIcon__XJuVL { width: 28px; height: 28px; font-size: 13px; }
-  .Layout_storeBadge__ZSlZa { display: none; }
-  .Layout_userName__TJrjs { display: none; }
-  .Layout_userRole__3rfg7 { display: none; }
-  .Layout_notifDot__2_Kxr { min-width: 18px; height: 18px; font-size: 10px; }
-  .Layout_logoutBtn__gtjmW { font-size: 11px; padding: 4px 8px; }
-  .Layout_avatar__yFDaa { width: 32px; height: 32px; font-size: 12px; }
-}
 /*!************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[7].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[7].use[3]!./app/applications/applications.module.css ***!
   \************************************************************************************************************************************************************************************************************************************************************************************/

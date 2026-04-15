@@ -5,9 +5,9 @@ import styles from './stores.module.css'
 
 export default async function StoresPage() {
   const supabase = createServerSupabase()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
-  const { data: profile } = await supabase.from('profiles').select('*, store:stores(*)').eq('id', user.id).single()
+  const { data: { session } } = await supabase.auth.getSession()
+  if (!session) redirect('/login')
+  const { data: profile } = await supabase.from('profiles').select('*, store:stores(*)').eq('id', session.user.id).single()
   if (profile?.role !== 'manager') redirect('/dashboard')
 
   const { data: stores = [] } = await supabase.from('stores').select('*')

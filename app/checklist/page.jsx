@@ -29,9 +29,9 @@ export default function ChecklistPage() {
   useEffect(() => { loadData() }, [])
 
   async function loadData() {
-    const { data: { user } } = await supabase.auth.getUser()
-if (!user) return
-    const { data: p } = await supabase.from('profiles').select('*, store:stores(*)').eq('id', user.id).single()
+    const { data: { session } } = await supabase.auth.getSession()
+    if (!session) return
+    const { data: p } = await supabase.from('profiles').select('*, store:stores(*)').eq('id', session.user.id).single()
     setProfile(p); setStore(p?.store)
     const { data: j } = await supabase.from('jobs')
       .select('id,client_name,location_detail,status')

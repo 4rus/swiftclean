@@ -20,14 +20,39 @@
     "/dashboard/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/css-app_applications_applications_module_css-app_dashboard_dashboard_module_css-components_La-5242a2.css",
+      "static/css/css-app_applications_applications_module_css-app_checklist_checklist_module_css-app_dashboard-a90da2.css",
       "static/chunks/app/dashboard/page.js"
     ],
     "/applications/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/css-app_applications_applications_module_css-app_dashboard_dashboard_module_css-components_La-5242a2.css",
+      "static/css/css-app_applications_applications_module_css-app_checklist_checklist_module_css-app_dashboard-a90da2.css",
       "static/chunks/app/applications/page.js"
+    ],
+    "/activity/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/css-app_activity_activity_module_css.css",
+      "static/css/css-app_applications_applications_module_css-app_checklist_checklist_module_css-app_dashboard-a90da2.css",
+      "static/chunks/app/activity/page.js"
+    ],
+    "/photos/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/css-app_applications_applications_module_css-app_checklist_checklist_module_css-app_dashboard-a90da2.css",
+      "static/chunks/app/photos/page.js"
+    ],
+    "/checklist/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/css-app_applications_applications_module_css-app_checklist_checklist_module_css-app_dashboard-a90da2.css",
+      "static/chunks/app/checklist/page.js"
+    ],
+    "/invoices/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/css-app_applications_applications_module_css-app_checklist_checklist_module_css-app_dashboard-a90da2.css",
+      "static/chunks/app/invoices/page.js"
     ],
     "/careers/page": [
       "static/chunks/webpack.js",
@@ -35,11 +60,12 @@
       "static/css/css-app_careers_careers_module_css.css",
       "static/chunks/app/careers/page.js"
     ],
-    "/privacy/page": [
+    "/stores/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/css-app_privacy_privacy_module_css.css",
-      "static/chunks/app/privacy/page.js"
+      "static/css/css-app_stores_stores_module_css.css",
+      "static/css/css-app_applications_applications_module_css-app_checklist_checklist_module_css-app_dashboard-a90da2.css",
+      "static/chunks/app/stores/page.js"
     ]
   }
 }

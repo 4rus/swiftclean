@@ -6,10 +6,10 @@ import styles from './Layout.module.css'
 
 const NAV = [
   { href: '/dashboard',    label: 'Dashboard',    dot: 'teal',  roles: ['manager'] },
-  { href: '/jobs',         label: 'Jobs',         dot: 'blue',  roles: ['manager'] },
-  { href: '/photos',       label: 'Photos',       dot: 'teal',  roles: ['employee','manager'] },
+  { href: '/photos',       label: 'Photos',       dot: 'teal',  roles: ['employee', 'manager'] },
   { href: '/checklist',    label: 'Checklist',    dot: 'green', roles: ['manager'] },
   { href: '/invoices',     label: 'Invoices',     dot: 'amber', roles: ['manager'] },
+  { href: '/activity',     label: 'Activity',     dot: 'blue',  roles: ['manager'] },
   { href: '/applications', label: 'Applications', dot: 'green', roles: ['manager'] },
   { href: '/stores',       label: 'All Stores',   dot: 'amber', roles: ['manager'] },
   { href: '/employees',    label: 'Employees',    dot: 'amber', roles: ['manager'] },
@@ -21,15 +21,12 @@ function initials(name) {
 }
 
 export default function Layout({ children, profile, store }) {
-  const router = useRouter()
+  const router   = useRouter()
   const pathname = usePathname()
   const supabase = createClient()
   const [notifCount, setNotifCount] = useState(0)
 
-  const cookieRole = typeof document !== 'undefined' 
-  ? document.cookie.split(';').find(c => c.trim().startsWith('user_role='))?.split('=')[1] 
-  : null
-const role = profile?.role || cookieRole || 'employee'
+  const role = profile?.role || 'employee'
 
   useEffect(() => {
     if (!profile?.id) return
@@ -39,13 +36,21 @@ const role = profile?.role || cookieRole || 'employee'
   }, [profile?.id])
 
   async function handleLogout() {
+    // Log the logout event
+    if (profile?.id) {
+      await supabase.from('activity_log').insert({
+        user_id: profile.id,
+        store_id: profile.store_id || null,
+        event: 'logout',
+      })
+    }
     await supabase.auth.signOut()
     router.push('/login')
     router.refresh()
   }
 
-  const mainNav = NAV.filter(n => n.roles.includes(role) && !['applications','stores','employees'].includes(n.href.slice(1)))
-  const manageNav = NAV.filter(n => n.roles.includes(role) && ['applications','stores','employees'].includes(n.href.slice(1)))
+  const mainNav   = NAV.filter(n => n.roles.includes(role) && !['applications','stores','employees','activity'].includes(n.href.slice(1)))
+  const manageNav = NAV.filter(n => n.roles.includes(role) &&  ['applications','stores','employees','activity'].includes(n.href.slice(1)))
 
   return (
     <div className={styles.app}>
@@ -92,7 +97,7 @@ const role = profile?.role || cookieRole || 'employee'
             </>
           )}
         </nav>
-        <main className={styles.main} key={pathname}>{children}</main>
+        <main className={styles.main}>{children}</main>
       </div>
     </div>
   )

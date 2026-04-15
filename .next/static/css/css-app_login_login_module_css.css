@@ -25,6 +25,9 @@
 .login_submitBtn__lT3MA { width: 100%; padding: 11px; background: var(--teal-400); color: white; border: none; border-radius: var(--radius); font-size: 14px; font-weight: 500; cursor: pointer; transition: background 0.15s; margin-top: 4px; }
 .login_submitBtn__lT3MA:hover:not(:disabled) { background: var(--teal-600); }
 .login_submitBtn__lT3MA:disabled { opacity: 0.55; cursor: not-allowed; }
+.login_passwordWrapper__NTzZ4 { position: relative; display: flex; align-items: center; }
+.login_passwordWrapper__NTzZ4 input { width: 100%; padding-right: 2.5rem; }
+.login_eyeBtn__IiF4F { position: absolute; right: 0.6rem; background: none; border: none; cursor: pointer; font-size: 1.1rem; line-height: 1; padding: 0; color: var(--text-2); }
 
 .login_hint__C3RWj { text-align: center; font-size: 12px; color: var(--text-3); margin-top: 1.5rem; line-height: 1.6; }
 

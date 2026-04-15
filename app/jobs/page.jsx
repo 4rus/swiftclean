@@ -5,15 +5,14 @@ import styles from './jobs.module.css'
 
 export default async function JobsPage() {
   const supabase = createServerSupabase()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
-  const { data: profile } = await supabase.from('profiles').select('*, store:stores(*)').eq('id', user.id).single()
+  const { data: { session } } = await supabase.auth.getSession()
+  if (!session) redirect('/login')
+  const { data: profile } = await supabase.from('profiles').select('*, store:stores(*)').eq('id', session.user.id).single()
   const isManager = profile?.role === 'manager'
 
   let q = supabase.from('jobs').select('*, store:stores(name), assigned:profiles(full_name)').order('scheduled_time', { ascending: false })
   if (!isManager) q = q.eq('store_id', profile?.store_id)
-  const { data: jobsRaw } = await q
-  const jobs = jobsRaw || []  
+  const { data: jobs = [] } = await q
 
   function sl(s) { return s==='done'?'Done':s==='in_progress'?'In progress':'Pending' }
   function sc(s) { return s==='done'?'done':s==='in_progress'?'progress':'pending' }

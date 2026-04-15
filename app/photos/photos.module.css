@@ -1,11 +1,50 @@
 .header { display: flex; align-items: flex-start; justify-content: space-between; }
 .title { font-size: 20px; font-weight: 600; }
 .sub { font-size: 13px; color: var(--text-2); }
-.uploadBar { display: flex; align-items: center; gap: 10px; padding: 1rem 1.1rem; flex-wrap: wrap; }
+
+.storePicker { display: flex; gap: 8px; flex-wrap: wrap; }
+.storeTab { padding: 7px 14px; border-radius: 20px; font-size: 13px; font-weight: 500; border: 1px solid var(--border-md); background: var(--surface); color: var(--text-2); cursor: pointer; transition: all 0.12s; white-space: nowrap; }
+.storeTab:hover { border-color: var(--teal-400); color: var(--teal-600); }
+.storeTabActive { background: var(--teal-400) !important; color: white !important; border-color: var(--teal-400) !important; }
+
+.uploadSection { padding: 1rem 1.1rem; }
+.uploadControls { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.typeSelect { width: 120px; }
+.captionInput { flex: 1; min-width: 140px; }
 .fileInput { display: none; }
-.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
-.photoCard { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-sm); }
+
+.emptyState { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 4rem 2rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
+.photoCard { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-sm); cursor: pointer; transition: transform 0.12s, box-shadow 0.12s; }
+.photoCard:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+.photoCard:active { transform: scale(0.98); }
 .img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; background: var(--gray-100); }
 .photoMeta { padding: 8px 10px; display: flex; flex-direction: column; gap: 3px; }
-.photoJob { font-size: 12px; font-weight: 500; }
-.photoBy { font-size: 11px; color: var(--text-3); }
+.photoCaption { font-size: 12px; font-weight: 500; color: var(--text); }
+.photoBy { font-size: 11px; color: var(--text-2); }
+.photoTime { font-size: 11px; color: var(--text-3); }
+
+/* Lightbox */
+.lightboxOverlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 1rem; }
+.lightboxContent { position: relative; background: var(--surface); border-radius: var(--radius-xl); overflow: hidden; max-width: 90vw; max-height: 90vh; display: flex; flex-direction: column; }
+.lightboxClose { position: absolute; top: 10px; right: 12px; background: rgba(0,0,0,0.5); color: white; border: none; border-radius: 50%; width: 32px; height: 32px; font-size: 16px; cursor: pointer; z-index: 10; display: flex; align-items: center; justify-content: center; }
+.lightboxImg { width: 100%; max-height: 75vh; object-fit: contain; display: block; background: var(--gray-100); }
+.lightboxMeta { padding: 10px 14px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.lightboxCaption { font-size: 13px; font-weight: 500; color: var(--text); }
+.lightboxBy { font-size: 12px; color: var(--text-2); }
+.lightboxTime { font-size: 12px; color: var(--text-3); margin-left: auto; }
+
+@media (max-width: 768px) {
+  .storePicker { gap: 6px; }
+  .storeTab { font-size: 12px; padding: 6px 11px; }
+  .uploadControls { gap: 8px; }
+  .typeSelect { width: 100px; }
+  .grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .lightboxImg { max-height: 60vh; }
+  .lightboxMeta { gap: 6px; }
+}
+
+@media (max-width: 400px) {
+  .grid { grid-template-columns: 1fr; }
+}

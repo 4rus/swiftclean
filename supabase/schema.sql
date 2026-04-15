@@ -18,13 +18,13 @@ create table stores (
 
 -- INDIMOE store locations (DO NOT change IDs — they link to GPS in code)
 insert into stores (name, address, lat, lng) values
-  ('Swiss Chalet - Country Hills', '508 Country Village Way NE, Calgary, AB T3K 0R2',        51.1554, -114.0605),
-  ('Bahubali',                     '6520 36 St NE Unit - 1120, Calgary, AB T3J 4C8',          51.0848, -113.9760),
-  ('Explode The Dessert Cafe',     '4715 88 Ave NE #1105, Calgary, AB T3J 4E4',               51.0912, -113.9632),
-  ('Mumbaayai Pure Veg',           '4100 109 Ave NE unit 3120, Calgary, AB T3N 2J1',          51.1234, -113.9581),
-  ('Lovely Sweet - Savanna',       '30 Savanna Cres NE #1110, Calgary, AB T3J 2E9',           51.1050, -113.9700),
-  ('Lovely Sweet - Skyview',       '6004 Country Hills Blvd NE #1860, Calgary, AB T3N 1K8',  51.1480, -114.0015),
-  ('Lovely Sweet - Redstone',      '235 Red Embers Way NE #3110, Calgary, AB T3N 1E9',        51.1667, -113.9566);
+  ('Country Village',      '508 Country Village Way NE, Calgary, AB T3K 0R2', 51.1175, -114.0469),
+  ('Saddletown (36 St)',   '6520 36 St NE Unit 1120, Calgary, AB T3J 4C8',    51.0847, -113.9760),
+  ('Taradale (88 Ave)',    '4715 88 Ave NE #1105, Calgary, AB T3J 4E4',        51.0912, -113.9632),
+  ('Cornerstone (109 Ave)','4100 109 Ave NE Unit 3120, Calgary, AB T3N 2J1',  51.1234, -113.9581),
+  ('Savanna',              '30 Savanna Cres NE #1110, Calgary, AB T3J 2E9',   51.1050, -113.9700),
+  ('Red Embers',           '235 Red Embers Way NE #3110, Calgary, AB T3N 1E9',51.1320, -113.9540),
+  ('Country Hills Blvd',   '6004 Country Hills Blvd NE #1860, Calgary, AB T3N 1K8', 51.1402, -114.0015);
 
 -- ── PROFILES ────────────────────────────────────────────────────
 create table profiles (

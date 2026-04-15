@@ -19,7 +19,7 @@ export default function NewJobPage() {
   async function loadData() {
     const { data: { session } } = await supabase.auth.getSession()
     if (!session) return
-    const { data: p } = await supabase.from('profiles').select('*, store:stores(*)').eq('id', user.id).single()
+    const { data: p } = await supabase.from('profiles').select('*, store:stores(*)').eq('id', session.user.id).single()
     setProfile(p); setStore(p?.store)
     const { data: emp } = await supabase.from('profiles').select('id, full_name').eq('store_id', p?.store_id)
     setEmployees(emp || [])
