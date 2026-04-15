@@ -340,7 +340,7 @@ export default function CareersPage() {
           <div className={styles.statusPhotoBlock}>
             <div className={styles.statusPhotoLabel}>
               📎 Upload a photo of your status document
-              <span className={styles.optionalTag}>(optional — up to 5 images)</span>
+              <span className={styles.optionalTag}>(Up to 5 images)</span>
             </div>
 
             {/* Two big tap buttons: Camera or Upload */}
