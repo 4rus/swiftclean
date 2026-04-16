@@ -49,3 +49,11 @@ input:focus, select:focus, textarea:focus { border-color: var(--teal-400); box-s
 .field label { font-size: 12px; font-weight: 500; color: var(--text-2); }
 .field input, .field select, .field textarea { width: 100%; }
 
+@media (max-width: 768px) {
+  /* Larger tap targets on mobile */
+  .btn { min-height: 40px; padding: 9px 16px; }
+  input, select, textarea { min-height: 40px; padding: 10px 12px; }
+  /* Prevent zoom on input focus (iOS) */
+  input, select, textarea { font-size: 16px; }
+}
+

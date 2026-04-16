@@ -16,6 +16,24 @@
       "static/chunks/main-app.js",
       "static/css/css-app_login_login_module_css.css",
       "static/chunks/app/login/page.js"
+    ],
+    "/dashboard/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/css-app_checklist_checklist_module_css-app_dashboard_dashboard_module_css-app_photos_photos_m-8f0dd7.css",
+      "static/chunks/app/dashboard/page.js"
+    ],
+    "/photos/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/css-app_checklist_checklist_module_css-app_dashboard_dashboard_module_css-app_photos_photos_m-8f0dd7.css",
+      "static/chunks/app/photos/page.js"
+    ],
+    "/checklist/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/css-app_checklist_checklist_module_css-app_dashboard_dashboard_module_css-app_photos_photos_m-8f0dd7.css",
+      "static/chunks/app/checklist/page.js"
     ]
   }
 }

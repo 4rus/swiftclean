@@ -53,14 +53,23 @@ export default function PhotosPage() {
       .select('*, uploader:profiles(full_name)')
       .order('created_at', { ascending: false })
 
+    // Include photos linked directly to store (job_id null) AND photos from store's jobs
     if (jobIds.length > 0) {
-      phQuery = phQuery.in('job_id', jobIds)
+      phQuery = phQuery.or(`store_id.eq.${storeId},job_id.in.(${jobIds.join(',')})`)
     } else {
       phQuery = phQuery.eq('store_id', storeId)
     }
 
     const { data: ph } = await phQuery
-    setPhotos(ph || [])
+    if (!ph?.length) { setPhotos([]); return }
+
+    // Batch-generate signed URLs (works for both public and private buckets)
+    const { data: signed } = await supabase.storage
+      .from('job-photos')
+      .createSignedUrls(ph.map(p => p.storage_path), 3600)
+
+    const urlMap = Object.fromEntries((signed || []).map(s => [s.path, s.signedUrl]))
+    setPhotos(ph.map(p => ({ ...p, signedUrl: urlMap[p.storage_path] || null })))
   }
 
   async function handleUpload(e) {
@@ -98,13 +107,9 @@ export default function PhotosPage() {
     loadPhotos(storeId)
   }
 
-  function getUrl(path) {
-    return supabase.storage.from('job-photos').getPublicUrl(path).data.publicUrl
-  }
-
   function openLightbox(ph) {
     setLightbox({
-      url: getUrl(ph.storage_path),
+      url: ph.signedUrl,
       type: ph.photo_type,
       caption: ph.caption,
       by: ph.uploader?.full_name,
@@ -181,7 +186,7 @@ export default function PhotosPage() {
               onChange={e => setCaption(e.target.value)}
               className={styles.captionInput}
             />
-            <input ref={fileRef} type="file" accept="image/*" onChange={handleUpload} disabled={uploading} className={styles.fileInput} />
+            <input ref={fileRef} type="file" accept="image/*" capture="environment" onChange={handleUpload} disabled={uploading} className={styles.fileInput} />
             <button className="btn btn-primary" onClick={() => fileRef.current?.click()} disabled={uploading || !selectedStoreId}>
               {uploading ? 'Uploading…' : '📷 Upload photo'}
             </button>
@@ -195,7 +200,7 @@ export default function PhotosPage() {
         {/* BEFORE */}
         <div className={styles.column}>
           <div className={`${styles.columnHeader} ${styles.columnHeaderBefore}`}>
-            <span className={styles.columnIcon}>🔴</span>
+            <span className={styles.columnIcon}></span>
             <span className={styles.columnTitle}>Before</span>
             {beforePhotos.length > 0 && (
               <span className={styles.columnCount}>{beforePhotos.length}</span>
@@ -210,7 +215,7 @@ export default function PhotosPage() {
           ) : (
             <div className={styles.photoList}>
               {beforePhotos.map(ph => (
-                <PhotoCard key={ph.id} ph={ph} getUrl={getUrl} onClick={() => openLightbox(ph)} isManager={isManager} onDelete={handleDelete} />
+                <PhotoCard key={ph.id} ph={ph} onClick={() => openLightbox(ph)} isManager={isManager} onDelete={handleDelete} />
               ))}
             </div>
           )}
@@ -219,7 +224,7 @@ export default function PhotosPage() {
         {/* AFTER */}
         <div className={styles.column}>
           <div className={`${styles.columnHeader} ${styles.columnHeaderAfter}`}>
-            <span className={styles.columnIcon}>🟢</span>
+            <span className={styles.columnIcon}></span>
             <span className={styles.columnTitle}>After</span>
             {afterPhotos.length > 0 && (
               <span className={styles.columnCount}>{afterPhotos.length}</span>
@@ -234,7 +239,7 @@ export default function PhotosPage() {
           ) : (
             <div className={styles.photoList}>
               {afterPhotos.map(ph => (
-                <PhotoCard key={ph.id} ph={ph} getUrl={getUrl} onClick={() => openLightbox(ph)} isManager={isManager} onDelete={handleDelete} />
+                <PhotoCard key={ph.id} ph={ph} onClick={() => openLightbox(ph)} isManager={isManager} onDelete={handleDelete} />
               ))}
             </div>
           )}
@@ -251,7 +256,7 @@ export default function PhotosPage() {
           </div>
           <div className={styles.otherGrid}>
             {otherPhotos.map(ph => (
-              <PhotoCard key={ph.id} ph={ph} getUrl={getUrl} onClick={() => openLightbox(ph)} isManager={isManager} onDelete={handleDelete} />
+              <PhotoCard key={ph.id} ph={ph} onClick={() => openLightbox(ph)} isManager={isManager} onDelete={handleDelete} />
             ))}
           </div>
         </div>
@@ -261,8 +266,8 @@ export default function PhotosPage() {
   )
 }
 
-function PhotoCard({ ph, getUrl, onClick, isManager, onDelete }) {
-  const url = getUrl(ph.storage_path)
+function PhotoCard({ ph, onClick, isManager, onDelete }) {
+  const url = ph.signedUrl
   const date = new Date(ph.created_at)
   const dateStr = date.toLocaleDateString('en-CA', { month: 'short', day: 'numeric' })
   const timeStr = date.toLocaleTimeString('en-CA', { hour: '2-digit', minute: '2-digit' })
