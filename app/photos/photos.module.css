@@ -98,6 +98,10 @@
 .photoCard:hover { background: var(--surface-hover, rgba(0,0,0,0.03)); }
 .photoCard:active { background: var(--surface-active, rgba(0,0,0,0.06)); }
 
+.imgWrapper {
+  position: relative;
+}
+
 .img {
   width: 100%;
   aspect-ratio: 16/9;
@@ -105,6 +109,29 @@
   display: block;
   background: var(--gray-100);
 }
+
+.deleteBtn {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0,0,0,0.55);
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.15s, background 0.15s;
+  z-index: 2;
+}
+
+.photoCard:hover .deleteBtn { opacity: 1; }
+.deleteBtn:hover { background: rgba(220,38,38,0.85); }
 
 .photoMeta {
   padding: 8px 12px;
@@ -160,15 +187,18 @@
 .lightboxBy { font-size: 12px; color: var(--text-2); }
 .lightboxTime { font-size: 12px; color: var(--text-3); margin-left: auto; }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .columns { grid-template-columns: 1fr; }
-  .storePicker { gap: 6px; }
-  .storeTab { font-size: 12px; padding: 6px 11px; }
+  .storePicker { gap: 6px; overflow-x: auto; -webkit-overflow-scrolling: touch; flex-wrap: nowrap; padding-bottom: 2px; }
+  .storeTab { font-size: 12px; padding: 6px 11px; flex-shrink: 0; }
   .uploadControls { gap: 8px; }
+  .uploadControls .btn { width: 100%; justify-content: center; }
   .typeSelect { width: 100px; }
+  .captionInput { width: 100%; }
   .otherGrid { grid-template-columns: 1fr 1fr; }
   .lightboxImg { max-height: 60vh; }
   .lightboxMeta { gap: 6px; }
+  .header { flex-direction: column; gap: 6px; }
 }
 
 @media (max-width: 400px) {

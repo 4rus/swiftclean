@@ -99,3 +99,32 @@
 /* Day chips */
 .dayChips { display: flex; gap: 6px; flex-wrap: wrap; }
 .dayChip { font-size: 12px; padding: 3px 10px; border-radius: 20px; background: var(--teal-50); color: var(--teal-600); font-weight: 500; }
+
+/* Mobile back button (hidden on desktop) */
+.mobileBack { display: none; }
+
+@media (max-width: 768px) {
+  .layout { display: block; }
+
+  /* Hide detail panel by default; show it when .layoutDetail is on parent */
+  .detail { display: none; position: static; min-height: 0; border-radius: var(--radius-lg); box-shadow: none; }
+  .layoutDetail .list { display: none; }
+  .layoutDetail .detail { display: block; }
+  .detailInner { max-height: calc(100vh - 100px); }
+
+  /* Back button shown on mobile */
+  .mobileBack {
+    display: flex; align-items: center; gap: 6px;
+    padding: 12px 14px;
+    border: none; border-bottom: 1px solid var(--border);
+    font-size: 14px; font-weight: 500; color: var(--teal-600);
+    background: none; width: 100%; cursor: pointer; text-align: left;
+  }
+
+  /* Filter bar scrolls horizontally on mobile */
+  .filterBar { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 4px; }
+  .filterBtn { flex-shrink: 0; }
+
+  /* Header stacks on mobile */
+  .header { flex-direction: column; gap: 10px; align-items: flex-start; }
+}

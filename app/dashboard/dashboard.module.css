@@ -16,3 +16,8 @@
 .clientName { font-weight: 500; }
 .clientSub { font-size: 12px; color: var(--text-3); }
 .empty { text-align: center; color: var(--text-3); padding: 2rem !important; }
+.tableScroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+@media (max-width: 768px) {
+  .stats { grid-template-columns: repeat(2, 1fr); }
+  .table th, .table td { white-space: nowrap; }
+}

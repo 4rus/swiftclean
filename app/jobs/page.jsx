@@ -23,7 +23,7 @@ export default async function JobsPage() {
         <div><h1 className={styles.title}>Jobs</h1><p className={styles.sub}>All cleaning jobs for your location</p></div>
         <a href="/jobs/new" className="btn btn-primary">+ New job</a>
       </div>
-      <div className="card">
+      <div className={`card ${styles.tableScroll}`}>
         <table className={styles.table}>
           <thead><tr><th>Client</th><th>Location detail</th>{isManager&&<th>Store</th>}<th>Employee</th><th>Scheduled</th><th>Status</th></tr></thead>
           <tbody>

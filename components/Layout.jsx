@@ -25,6 +25,7 @@ export default function Layout({ children, profile, store }) {
   const pathname = usePathname()
   const supabase = createClient()
   const [notifCount, setNotifCount] = useState(0)
+  const [navOpen, setNavOpen] = useState(false)
 
   const role = profile?.role || 'employee'
 
@@ -56,6 +57,9 @@ export default function Layout({ children, profile, store }) {
     <div className={styles.app}>
       <header className={styles.topbar}>
         <div className={styles.logo}>
+          <button className={styles.hamburger} onClick={() => setNavOpen(o => !o)} aria-label="Toggle menu">
+            <span /><span /><span />
+          </button>
           <div className={styles.logoIcon}>✦</div>
           <div>
             <span className={styles.logoText}>SwiftClean</span>
@@ -77,10 +81,11 @@ export default function Layout({ children, profile, store }) {
       </header>
 
       <div className={styles.body}>
-        <nav className={styles.sidebar}>
+        {navOpen && <div className={styles.overlay} onClick={() => setNavOpen(false)} />}
+        <nav className={`${styles.sidebar} ${navOpen ? styles.sidebarOpen : ''}`}>
           <div className={styles.navSection}>Main</div>
           {mainNav.map(n => (
-            <a key={n.href} href={n.href} className={`${styles.navItem} ${pathname === n.href ? styles.active : ''}`}>
+            <a key={n.href} href={n.href} onClick={() => setNavOpen(false)} className={`${styles.navItem} ${pathname === n.href ? styles.active : ''}`}>
               <span className={`${styles.dot} ${styles[n.dot]}`} />
               {n.label}
             </a>
@@ -89,7 +94,7 @@ export default function Layout({ children, profile, store }) {
             <>
               <div className={styles.navSection}>Manage</div>
               {manageNav.map(n => (
-                <a key={n.href} href={n.href} className={`${styles.navItem} ${pathname === n.href ? styles.active : ''}`}>
+                <a key={n.href} href={n.href} onClick={() => setNavOpen(false)} className={`${styles.navItem} ${pathname === n.href ? styles.active : ''}`}>
                   <span className={`${styles.dot} ${styles[n.dot]}`} />
                   {n.label}
                 </a>

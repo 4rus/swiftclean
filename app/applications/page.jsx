@@ -92,7 +92,7 @@ export default function ApplicationsPage() {
         ))}
       </div>
 
-      <div className={styles.layout}>
+      <div className={`${styles.layout} ${selected ? styles.layoutDetail : ''}`}>
         {/* List */}
         <div className={styles.list}>
           {loading && <div className={styles.empty}>Loading…</div>}
@@ -136,6 +136,7 @@ export default function ApplicationsPage() {
             </div>
           ) : (
             <div className={styles.detailInner}>
+              <button className={styles.mobileBack} onClick={() => setSelected(null)}>← Back to list</button>
               {/* Applicant header */}
               <div className={styles.detailHead}>
                 <div className={styles.detailAvatar}>{initials(selected.full_name)}</div>

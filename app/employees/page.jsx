@@ -26,7 +26,7 @@ export default async function EmployeesPage() {
         <div><h1 className={styles.title}>Employees</h1><p className={styles.sub}>All staff across INDIMOE locations</p></div>
         <a href="/employees/invite" className="btn btn-primary">+ Invite employee</a>
       </div>
-      <div className="card">
+      <div className={`card ${styles.tableScroll}`}>
         <table className={styles.table}>
           <thead>
             <tr><th>Name</th><th>Email</th><th>Store</th><th>Role</th></tr>

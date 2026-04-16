@@ -85,6 +85,13 @@ export default function PhotosPage() {
     fileRef.current.value = ''
   }
 
+  async function handleDelete(ph) {
+    if (!confirm('Delete this photo? This cannot be undone.')) return
+    await supabase.storage.from('job-photos').remove([ph.storage_path])
+    await supabase.from('photos').delete().eq('id', ph.id)
+    loadPhotos(selectedStoreId)
+  }
+
   async function handleStoreChange(storeId) {
     setSelectedStoreId(storeId)
     setPhotos([])
@@ -203,7 +210,7 @@ export default function PhotosPage() {
           ) : (
             <div className={styles.photoList}>
               {beforePhotos.map(ph => (
-                <PhotoCard key={ph.id} ph={ph} getUrl={getUrl} onClick={() => openLightbox(ph)} />
+                <PhotoCard key={ph.id} ph={ph} getUrl={getUrl} onClick={() => openLightbox(ph)} isManager={isManager} onDelete={handleDelete} />
               ))}
             </div>
           )}
@@ -227,7 +234,7 @@ export default function PhotosPage() {
           ) : (
             <div className={styles.photoList}>
               {afterPhotos.map(ph => (
-                <PhotoCard key={ph.id} ph={ph} getUrl={getUrl} onClick={() => openLightbox(ph)} />
+                <PhotoCard key={ph.id} ph={ph} getUrl={getUrl} onClick={() => openLightbox(ph)} isManager={isManager} onDelete={handleDelete} />
               ))}
             </div>
           )}
@@ -244,7 +251,7 @@ export default function PhotosPage() {
           </div>
           <div className={styles.otherGrid}>
             {otherPhotos.map(ph => (
-              <PhotoCard key={ph.id} ph={ph} getUrl={getUrl} onClick={() => openLightbox(ph)} />
+              <PhotoCard key={ph.id} ph={ph} getUrl={getUrl} onClick={() => openLightbox(ph)} isManager={isManager} onDelete={handleDelete} />
             ))}
           </div>
         </div>
@@ -254,7 +261,7 @@ export default function PhotosPage() {
   )
 }
 
-function PhotoCard({ ph, getUrl, onClick }) {
+function PhotoCard({ ph, getUrl, onClick, isManager, onDelete }) {
   const url = getUrl(ph.storage_path)
   const date = new Date(ph.created_at)
   const dateStr = date.toLocaleDateString('en-CA', { month: 'short', day: 'numeric' })
@@ -262,7 +269,18 @@ function PhotoCard({ ph, getUrl, onClick }) {
 
   return (
     <div className={styles.photoCard} onClick={onClick}>
-      <img src={url} alt={ph.photo_type} className={styles.img} />
+      <div className={styles.imgWrapper}>
+        <img src={url} alt={ph.photo_type} className={styles.img} />
+        {isManager && (
+          <button
+            className={styles.deleteBtn}
+            onClick={e => { e.stopPropagation(); onDelete(ph) }}
+            title="Delete photo"
+          >
+            🗑
+          </button>
+        )}
+      </div>
       <div className={styles.photoMeta}>
         {ph.caption && <div className={styles.photoCaption}>{ph.caption}</div>}
         <div className={styles.photoRow}>

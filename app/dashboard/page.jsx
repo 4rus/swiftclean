@@ -47,7 +47,7 @@ export default async function DashboardPage() {
         ))}
       </div>
 
-      <div className="card">
+      <div className={`card ${styles.tableScroll}`}>
         <div className={styles.cardHead}>
           <span className={styles.cardTitle}>Today&apos;s jobs</span>
           <a href="/jobs" className="btn btn-sm">View all →</a>
