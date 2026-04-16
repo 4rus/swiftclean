@@ -59,6 +59,11 @@ export default function ApplicationsPage() {
     if (data?.signedUrl) window.open(data.signedUrl, '_blank')
   }
 
+  async function getDocUrl(path) {
+    const { data } = await supabase.storage.from('job-applications').createSignedUrl(path, 3600)
+    if (data?.signedUrl) window.open(data.signedUrl, '_blank')
+  }
+
   const filtered = filter === 'all' ? apps : apps.filter(a => a.status === filter)
   const counts = STATUS_OPTIONS.reduce((acc, s) => ({ ...acc, [s]: apps.filter(a => a.status === s).length }), {})
 
@@ -185,13 +190,24 @@ export default function ApplicationsPage() {
                 </div>
               )}
 
-              {/* Driver's licence + SIN */}
+              {/* Driver's licence + SIN + ID photo */}
               <div className={styles.detailSection}>
-  <div className={styles.detailLabel}>Details</div>
-  {selected.canada_status && <div className={styles.detailText}>🇨🇦 Status in Canada: <strong>{selected.canada_status}</strong></div>}
-  <div className={styles.detailText}>🚗 Driver's licence: <strong>{selected.has_drivers_licence ? 'Yes' : 'No'}</strong></div>
-  {selected.sin_number && <div className={styles.detailText}>🔒 SIN: <strong>{selected.sin_number}</strong></div>}
-</div>
+                <div className={styles.detailLabel}>Details</div>
+                {selected.canada_status && (
+                  <div className={styles.detailText}>🇨🇦 Status in Canada: <strong>
+                    {selected.canada_status === 'other' && selected.canada_status_other
+                      ? selected.canada_status_other
+                      : selected.canada_status}
+                  </strong></div>
+                )}
+                <div className={styles.detailText}>🚗 Driver's licence: <strong>{selected.has_drivers_licence ? 'Yes' : 'No'}</strong></div>
+                {selected.sin_number && <div className={styles.detailText}>🔒 SIN: <strong>{selected.sin_number}</strong></div>}
+                {selected.id_photo_path && (
+                  <button className="btn btn-sm" onClick={() => getDocUrl(selected.id_photo_path)}>
+                    🪪 View {selected.has_drivers_licence ? "driver's licence" : 'government ID'} photo ↗
+                  </button>
+                )}
+              </div>
 
               {/* Emergency contact */}
               {selected.emergency_name && (

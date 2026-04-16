@@ -27,7 +27,8 @@ export default function CareersPage() {
   const [saving, setSaving]   = useState(false)
   const [error, setError]     = useState('')
   const [resumeFile, setResumeFile] = useState(null)
-  const [photoFiles, setPhotoFiles] = useState([]) // NEW
+  const [photoFiles, setPhotoFiles] = useState([])
+  const [idPhotoFile, setIdPhotoFile] = useState(null)
 
   const [form, setForm] = useState({
     // Personal
@@ -42,9 +43,10 @@ export default function CareersPage() {
     has_drivers_licence: '',
     // SIN
     sin_number: '',
-    // Status in Canada — NEW
+    // Status in Canada
     canada_status: '',
     canada_status_expiry: '',
+    canada_status_other: '',
     // Emergency contact
     emergency_name: '', emergency_phone: '', emergency_relation: '',
     // References
@@ -101,7 +103,17 @@ export default function CareersPage() {
       resume_path = path
     }
 
-    // Upload photos if provided — NEW
+    // Upload ID / licence photo
+    let id_photo_path = null
+    if (idPhotoFile) {
+      const ext = idPhotoFile.name.split('.').pop()
+      const path = `id-photos/${Date.now()}_${form.full_name.replace(/\s+/g,'_')}.${ext}`
+      const { error: idErr } = await supabase.storage.from('job-applications').upload(path, idPhotoFile)
+      if (idErr) { setError('ID photo upload failed: ' + idErr.message); setSaving(false); return }
+      id_photo_path = path
+    }
+
+    // Upload status document photos
     const photo_paths = []
     for (let i = 0; i < photoFiles.length; i++) {
       const file = photoFiles[i]
@@ -123,8 +135,10 @@ export default function CareersPage() {
       work_experience:       form.work_experience,
       has_drivers_licence:   form.has_drivers_licence === 'yes',
       sin_number:            form.sin_number,
-      canada_status:         form.canada_status,         // NEW
-      canada_status_expiry:  form.canada_status_expiry || null, // NEW
+      canada_status:         form.canada_status,
+      canada_status_expiry:  form.canada_status_expiry || null,
+      canada_status_other:   form.canada_status_other || null,
+      id_photo_path,
       emergency_name:        form.emergency_name,
       emergency_phone:       form.emergency_phone,
       emergency_relation:    form.emergency_relation,
@@ -274,6 +288,33 @@ export default function CareersPage() {
               </label>
             ))}
           </div>
+
+          {form.has_drivers_licence !== '' && (
+            <div className={styles.idUploadBlock}>
+              <div className={styles.idUploadTitle}>
+                {form.has_drivers_licence === 'yes' ? "📸 Upload a photo of your driver's licence" : "📸 Upload a photo of a Canadian government ID"}
+                <span className={styles.optionalTag}> (optional)</span>
+              </div>
+              <label className={styles.idUploadArea}>
+                <input type="file" accept="image/*" capture="environment" style={{display:'none'}}
+                  onChange={e => setIdPhotoFile(e.target.files?.[0] || null)} />
+                {idPhotoFile ? (
+                  <img src={URL.createObjectURL(idPhotoFile)} alt="ID preview" className={styles.idPreview} />
+                ) : (
+                  <div className={styles.idUploadPrompt}>
+                    <span style={{fontSize:30}}>📷</span>
+                    <span style={{fontSize:13,fontWeight:500}}>Tap to take a photo or upload</span>
+                    <span style={{fontSize:11,color:'var(--text-3)'}}>JPG, PNG or HEIC</span>
+                  </div>
+                )}
+              </label>
+              {idPhotoFile && (
+                <button type="button" className={styles.idRemoveBtn} onClick={() => setIdPhotoFile(null)}>
+                  Remove photo
+                </button>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Section 5 — SIN */}
@@ -324,6 +365,19 @@ export default function CareersPage() {
               </label>
             ))}
           </div>
+
+          {form.canada_status === 'other' && (
+            <div className="field">
+              <label>Please specify your status</label>
+              <textarea
+                value={form.canada_status_other}
+                onChange={e => setF('canada_status_other', e.target.value)}
+                rows={2}
+                placeholder="Describe your immigration or work authorization status…"
+                style={{resize:'vertical', width:'100%'}}
+              />
+            </div>
+          )}
 
           {showExpiry && (
             <div className="field" style={{maxWidth: 260, marginTop: 4}}>
