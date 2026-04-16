@@ -292,8 +292,7 @@ export default function CareersPage() {
           {form.has_drivers_licence !== '' && (
             <div className={styles.idUploadBlock}>
               <div className={styles.idUploadTitle}>
-                {form.has_drivers_licence === 'yes' ? "📸 Upload a photo of your driver's licence" : "📸 Upload a photo of a Canadian government ID"}
-                <span className={styles.optionalTag}> (optional)</span>
+                {form.has_drivers_licence === 'yes' ? "Upload a photo of your driver's licence" : "Upload a photo of a Canadian government ID"}
               </div>
               <label className={styles.idUploadArea}>
                 <input type="file" accept="image/*" capture="environment" style={{display:'none'}}
