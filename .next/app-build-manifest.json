@@ -16,38 +16,6 @@
       "static/chunks/main-app.js",
       "static/css/css-app_login_login_module_css.css",
       "static/chunks/app/login/page.js"
-    ],
-    "/dashboard/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-app_applications_applications_module_css-app_dashboard_dashboard_module_css-components_La-5242a2.css",
-      "static/chunks/app/dashboard/page.js"
-    ],
-    "/applications/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-app_applications_applications_module_css-app_dashboard_dashboard_module_css-components_La-5242a2.css",
-      "static/chunks/app/applications/page.js"
-    ],
-    "/careers/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-app_careers_careers_module_css.css",
-      "static/chunks/app/careers/page.js"
-    ],
-    "/stores/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-app_stores_stores_module_css.css",
-      "static/css/css-app_applications_applications_module_css-app_dashboard_dashboard_module_css-components_La-5242a2.css",
-      "static/chunks/app/stores/page.js"
-    ],
-    "/employees/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-app_employees_employees_module_css.css",
-      "static/css/css-app_applications_applications_module_css-app_dashboard_dashboard_module_css-components_La-5242a2.css",
-      "static/chunks/app/employees/page.js"
     ]
   }
 }

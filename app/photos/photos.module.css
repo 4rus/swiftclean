@@ -7,23 +7,148 @@
 .storeTab:hover { border-color: var(--teal-400); color: var(--teal-600); }
 .storeTabActive { background: var(--teal-400) !important; color: white !important; border-color: var(--teal-400) !important; }
 
+/* Upload */
 .uploadSection { padding: 1rem 1.1rem; }
+.uploadLabel { font-size: 13px; font-weight: 600; color: var(--text-2); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.04em; }
 .uploadControls { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .typeSelect { width: 120px; }
 .captionInput { flex: 1; min-width: 140px; }
 .fileInput { display: none; }
 
-.emptyState { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 4rem 2rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); }
+/* Before / After columns */
+.columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
 
-.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
-.photoCard { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-sm); cursor: pointer; transition: transform 0.12s, box-shadow 0.12s; }
-.photoCard:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
-.photoCard:active { transform: scale(0.98); }
-.img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; background: var(--gray-100); }
-.photoMeta { padding: 8px 10px; display: flex; flex-direction: column; gap: 3px; }
-.photoCaption { font-size: 12px; font-weight: 500; color: var(--text); }
-.photoBy { font-size: 11px; color: var(--text-2); }
+.column {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.columnHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.columnHeaderBefore { background: #fff5f5; }
+.columnHeaderAfter  { background: #f0fdf4; }
+.columnHeaderOther  { background: #eff6ff; }
+
+/* dark mode */
+@media (prefers-color-scheme: dark) {
+  .columnHeaderBefore { background: rgba(239,68,68,0.08); }
+  .columnHeaderAfter  { background: rgba(34,197,94,0.08); }
+  .columnHeaderOther  { background: rgba(59,130,246,0.08); }
+}
+
+.columnIcon { font-size: 14px; line-height: 1; }
+
+.columnTitle {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  flex: 1;
+}
+
+.columnCount {
+  font-size: 12px;
+  font-weight: 600;
+  background: var(--border-md);
+  color: var(--text-2);
+  border-radius: 20px;
+  padding: 2px 8px;
+  min-width: 22px;
+  text-align: center;
+}
+
+.columnEmpty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem 1rem;
+  gap: 8px;
+}
+
+.columnEmptyIcon { font-size: 28px; opacity: 0.4; }
+.columnEmptyText { font-size: 12px; color: var(--text-3); }
+
+/* Photo list inside column */
+.photoList {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.photoCard {
+  cursor: pointer;
+  transition: background 0.1s;
+  border-bottom: 1px solid var(--border);
+}
+
+.photoCard:last-child { border-bottom: none; }
+.photoCard:hover { background: var(--surface-hover, rgba(0,0,0,0.03)); }
+.photoCard:active { background: var(--surface-active, rgba(0,0,0,0.06)); }
+
+.img {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  display: block;
+  background: var(--gray-100);
+}
+
+.photoMeta {
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.photoCaption {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.photoRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.photoBy { font-size: 11px; color: var(--text-2); font-weight: 500; }
 .photoTime { font-size: 11px; color: var(--text-3); }
+
+/* Other section */
+.otherSection {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.otherGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0;
+}
+
+.otherGrid .photoCard {
+  border-bottom: none;
+  border-right: 1px solid var(--border);
+}
+
+.otherGrid .photoCard:last-child { border-right: none; }
 
 /* Lightbox */
 .lightboxOverlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 1rem; }
@@ -35,16 +160,17 @@
 .lightboxBy { font-size: 12px; color: var(--text-2); }
 .lightboxTime { font-size: 12px; color: var(--text-3); margin-left: auto; }
 
-@media (max-width: 768px) {
+@media (max-width: 640px) {
+  .columns { grid-template-columns: 1fr; }
   .storePicker { gap: 6px; }
   .storeTab { font-size: 12px; padding: 6px 11px; }
   .uploadControls { gap: 8px; }
   .typeSelect { width: 100px; }
-  .grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .otherGrid { grid-template-columns: 1fr 1fr; }
   .lightboxImg { max-height: 60vh; }
   .lightboxMeta { gap: 6px; }
 }
 
 @media (max-width: 400px) {
-  .grid { grid-template-columns: 1fr; }
+  .otherGrid { grid-template-columns: 1fr; }
 }

@@ -17,11 +17,10 @@ export default function PhotosPage() {
   const [allStores, setAllStores]             = useState([])
   const [selectedStoreId, setSelectedStoreId] = useState(null)
   const [ready, setReady]                     = useState(false)
-  const [lightbox, setLightbox]               = useState(null) // NEW
+  const [lightbox, setLightbox]               = useState(null)
 
   useEffect(() => { loadData() }, [])
 
-  // Close lightbox on Escape key
   useEffect(() => {
     function onKey(e) { if (e.key === 'Escape') setLightbox(null) }
     window.addEventListener('keydown', onKey)
@@ -96,8 +95,22 @@ export default function PhotosPage() {
     return supabase.storage.from('job-photos').getPublicUrl(path).data.publicUrl
   }
 
+  function openLightbox(ph) {
+    setLightbox({
+      url: getUrl(ph.storage_path),
+      type: ph.photo_type,
+      caption: ph.caption,
+      by: ph.uploader?.full_name,
+      time: new Date(ph.created_at).toLocaleString('en-CA', { dateStyle: 'medium', timeStyle: 'short' }),
+    })
+  }
+
   const isManager = profile?.role === 'manager'
   const currentStore = allStores.find(s => s.id === selectedStoreId) || store
+
+  const beforePhotos = photos.filter(p => p.photo_type === 'before')
+  const afterPhotos  = photos.filter(p => p.photo_type === 'after')
+  const otherPhotos  = photos.filter(p => p.photo_type === 'other')
 
   if (!ready) return null
 
@@ -145,8 +158,10 @@ export default function PhotosPage() {
         </div>
       )}
 
+      {/* Upload card */}
       <div className="card">
         <div className={styles.uploadSection}>
+          <div className={styles.uploadLabel}>Upload a photo</div>
           <div className={styles.uploadControls}>
             <select value={photoType} onChange={e => setPhotoType(e.target.value)} className={styles.typeSelect}>
               <option value="before">Before</option>
@@ -167,43 +182,94 @@ export default function PhotosPage() {
         </div>
       </div>
 
-      {photos.length === 0 ? (
-        <div className={styles.emptyState}>
-          <div style={{fontSize:36}}>📷</div>
-          <div style={{fontSize:13, color:'var(--text-3)', marginTop:8}}>
-            No photos yet for {currentStore?.name}
+      {/* Before / After columns */}
+      <div className={styles.columns}>
+
+        {/* BEFORE */}
+        <div className={styles.column}>
+          <div className={`${styles.columnHeader} ${styles.columnHeaderBefore}`}>
+            <span className={styles.columnIcon}>🔴</span>
+            <span className={styles.columnTitle}>Before</span>
+            {beforePhotos.length > 0 && (
+              <span className={styles.columnCount}>{beforePhotos.length}</span>
+            )}
+          </div>
+
+          {beforePhotos.length === 0 ? (
+            <div className={styles.columnEmpty}>
+              <div className={styles.columnEmptyIcon}>📷</div>
+              <div className={styles.columnEmptyText}>No before photos yet</div>
+            </div>
+          ) : (
+            <div className={styles.photoList}>
+              {beforePhotos.map(ph => (
+                <PhotoCard key={ph.id} ph={ph} getUrl={getUrl} onClick={() => openLightbox(ph)} />
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* AFTER */}
+        <div className={styles.column}>
+          <div className={`${styles.columnHeader} ${styles.columnHeaderAfter}`}>
+            <span className={styles.columnIcon}>🟢</span>
+            <span className={styles.columnTitle}>After</span>
+            {afterPhotos.length > 0 && (
+              <span className={styles.columnCount}>{afterPhotos.length}</span>
+            )}
+          </div>
+
+          {afterPhotos.length === 0 ? (
+            <div className={styles.columnEmpty}>
+              <div className={styles.columnEmptyIcon}>📷</div>
+              <div className={styles.columnEmptyText}>No after photos yet</div>
+            </div>
+          ) : (
+            <div className={styles.photoList}>
+              {afterPhotos.map(ph => (
+                <PhotoCard key={ph.id} ph={ph} getUrl={getUrl} onClick={() => openLightbox(ph)} />
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* OTHER */}
+      {otherPhotos.length > 0 && (
+        <div className={styles.otherSection}>
+          <div className={`${styles.columnHeader} ${styles.columnHeaderOther}`}>
+            <span className={styles.columnIcon}>🔵</span>
+            <span className={styles.columnTitle}>Other</span>
+            <span className={styles.columnCount}>{otherPhotos.length}</span>
+          </div>
+          <div className={styles.otherGrid}>
+            {otherPhotos.map(ph => (
+              <PhotoCard key={ph.id} ph={ph} getUrl={getUrl} onClick={() => openLightbox(ph)} />
+            ))}
           </div>
         </div>
-      ) : (
-        <div className={styles.grid}>
-          {photos.map(ph => {
-            const url = getUrl(ph.storage_path)
-            return (
-              <div
-                key={ph.id}
-                className={styles.photoCard}
-                onClick={() => setLightbox({
-                  url,
-                  type: ph.photo_type,
-                  caption: ph.caption,
-                  by: ph.uploader?.full_name,
-                  time: new Date(ph.created_at).toLocaleDateString('en-CA')
-                })}
-              >
-                <img src={url} alt={ph.photo_type} className={styles.img} />
-                <div className={styles.photoMeta}>
-                  <span className={`badge badge-${ph.photo_type === 'before' ? 'pending' : ph.photo_type === 'after' ? 'done' : 'progress'}`}>
-                    {ph.photo_type}
-                  </span>
-                  {ph.caption && <div className={styles.photoCaption}>{ph.caption}</div>}
-                  <div className={styles.photoBy}>{ph.uploader?.full_name}</div>
-                  <div className={styles.photoTime}>{new Date(ph.created_at).toLocaleDateString('en-CA')}</div>
-                </div>
-              </div>
-            )
-          })}
-        </div>
       )}
+
     </Layout>
+  )
+}
+
+function PhotoCard({ ph, getUrl, onClick }) {
+  const url = getUrl(ph.storage_path)
+  const date = new Date(ph.created_at)
+  const dateStr = date.toLocaleDateString('en-CA', { month: 'short', day: 'numeric' })
+  const timeStr = date.toLocaleTimeString('en-CA', { hour: '2-digit', minute: '2-digit' })
+
+  return (
+    <div className={styles.photoCard} onClick={onClick}>
+      <img src={url} alt={ph.photo_type} className={styles.img} />
+      <div className={styles.photoMeta}>
+        {ph.caption && <div className={styles.photoCaption}>{ph.caption}</div>}
+        <div className={styles.photoRow}>
+          <span className={styles.photoBy}>{ph.uploader?.full_name || 'Unknown'}</span>
+          <span className={styles.photoTime}>{dateStr} · {timeStr}</span>
+        </div>
+      </div>
+    </div>
   )
 }
