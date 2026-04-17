@@ -16,11 +16,20 @@ const STORE_CLIENTS = {
   'Country Hills Blvd':  { address: '6004 Country Hills Blvd NE #1860, Calgary, AB T3N 1K8' },
 }
 
-function todayStr() {
-  return new Date().toLocaleDateString('en-CA', { year: 'numeric', month: 'long', day: 'numeric' })
+function todayISO() {
+  return new Date().toISOString().slice(0, 10) // 'YYYY-MM-DD'
 }
+
+function isoToDisplay(iso) {
+  if (!iso) return ''
+  const [y, m, d] = iso.split('-')
+  const months = ['January','February','March','April','May','June','July','August',
+                  'September','October','November','December']
+  return `${months[Number(m) - 1]} ${Number(d)}, ${y}`
+}
+
 function genNum(list) {
-  return `INV-${new Date().getFullYear()}-${String(list.length + 1).padStart(3,'0')}`
+  return `INV-${new Date().getFullYear()}-${String(list.length + 1).padStart(3, '0')}`
 }
 
 export default function InvoicesPage() {
@@ -31,9 +40,10 @@ export default function InvoicesPage() {
   const [showForm, setShowForm] = useState(false)
   const [saving, setSaving]   = useState(false)
   const [busy, setBusy]       = useState(false)
+  const [deletingId, setDeletingId] = useState(null)
 
   const [form, setForm] = useState({
-    invoiceNumber: '', date: todayStr(),
+    invoiceNumber: '', date: todayISO(),
     clientName: '', clientAddress: '', poNumber: '',
     description: 'Restaurant cleaning services', qty: 1, unitPrice: '',
   })
@@ -45,7 +55,13 @@ export default function InvoicesPage() {
     if (!session) return
     const { data: p } = await supabase.from('profiles').select('*, store:stores(*)').eq('id', session.user.id).single()
     setProfile(p); setStore(p?.store)
-    const { data: inv } = await supabase.from('invoices').select('*').eq('store_id', p?.store_id).order('created_at', { ascending: false })
+    // newest first: order by invoice_date desc, then created_at desc as tiebreaker
+    const { data: inv } = await supabase
+      .from('invoices')
+      .select('*')
+      .eq('store_id', p?.store_id)
+      .order('invoice_date', { ascending: false })
+      .order('created_at', { ascending: false })
     const list = inv || []
     setInvoices(list)
     setForm(f => ({ ...f, invoiceNumber: genNum(list), clientAddress: STORE_CLIENTS[p?.store?.name]?.address || '' }))
@@ -62,25 +78,41 @@ export default function InvoicesPage() {
     setSaving(true)
     const { data, error } = await supabase.from('invoices').insert({
       store_id: profile?.store_id, created_by: profile?.id,
-      invoice_number: form.invoiceNumber, invoice_date: new Date().toISOString().slice(0,10),
+      invoice_number: form.invoiceNumber,
+      invoice_date: form.date, // now comes from the date picker (YYYY-MM-DD)
       client_name: form.clientName, client_address: form.clientAddress,
       po_number: form.poNumber, description: form.description,
       qty: Number(form.qty), unit_price: Number(form.unitPrice),
       subtotal, gst, total,
     }).select().single()
     if (!error) {
-      const next = [data, ...invoices]
+      // Insert then re-sort: newest date on top
+      const next = [data, ...invoices].sort((a, b) =>
+        new Date(b.invoice_date) - new Date(a.invoice_date) ||
+        new Date(b.created_at)  - new Date(a.created_at)
+      )
       setInvoices(next); setShowForm(false)
-      setForm(f => ({ ...f, invoiceNumber: genNum(next), clientName: '', unitPrice: '', poNumber: '' }))
+      setForm(f => ({ ...f, invoiceNumber: genNum(next), clientName: '', unitPrice: '', poNumber: '', date: todayISO() }))
     }
     setSaving(false)
+  }
+
+  async function handleDelete(inv) {
+    if (!window.confirm(`Delete invoice ${inv.invoice_number}? This cannot be undone.`)) return
+    setDeletingId(inv.id)
+    const { error } = await supabase.from('invoices').delete().eq('id', inv.id)
+    if (!error) {
+      const next = invoices.filter(i => i.id !== inv.id)
+      setInvoices(next)
+    }
+    setDeletingId(null)
   }
 
   async function downloadPDF(inv) {
     setBusy(true)
     await generateInvoicePDF({
       invoiceNumber: inv.invoice_number,
-      date: new Date(inv.invoice_date).toLocaleDateString('en-CA',{year:'numeric',month:'long',day:'numeric'}),
+      date: isoToDisplay(inv.invoice_date),
       clientName: inv.client_name, clientAddress: inv.client_address,
       poNumber: inv.po_number,
       items: [{ qty: inv.qty, description: inv.description, unitPrice: inv.unit_price }],
@@ -91,10 +123,11 @@ export default function InvoicesPage() {
   async function previewPDF() {
     setBusy(true)
     await generateInvoicePDF({
-      invoiceNumber: form.invoiceNumber, date: form.date,
+      invoiceNumber: form.invoiceNumber,
+      date: isoToDisplay(form.date),
       clientName: form.clientName || 'Client Name', clientAddress: form.clientAddress,
       poNumber: form.poNumber,
-      items: [{ qty: Number(form.qty), description: form.description, unitPrice: Number(form.unitPrice)||0 }],
+      items: [{ qty: Number(form.qty), description: form.description, unitPrice: Number(form.unitPrice) || 0 }],
     })
     setBusy(false)
   }
@@ -127,19 +160,30 @@ export default function InvoicesPage() {
             <div style={{textAlign:'right'}}>
               <div className={styles.invBigTitle}>INVOICE / FACTURE</div>
               <div className={styles.companyMeta}>No. <strong>{form.invoiceNumber}</strong></div>
-              <div className={styles.companyMeta}>{form.date}</div>
+              <div className={styles.companyMeta}>{isoToDisplay(form.date)}</div>
               <div className={styles.companyMeta} style={{marginTop:4,color:'var(--text-3)',fontSize:11}}>Tax Reg. No.: {COMPANY.taxReg}</div>
             </div>
           </div>
 
           <div className={styles.formGrid}>
             <div className="field">
-              <label>Sold To / Vendu à *</label>
-              <input placeholder="e.g. Swiss Chalet" value={form.clientName} onChange={e => setF('clientName', e.target.value)} />
+              <label>Invoice Date / Date *</label>
+              <input
+                type="date"
+                value={form.date}
+                onChange={e => setF('date', e.target.value)}
+              />
             </div>
             <div className="field">
               <label>P.O. / Bon de commande</label>
               <input placeholder="Optional" value={form.poNumber} onChange={e => setF('poNumber', e.target.value)} />
+            </div>
+            <div className="field">
+              <label>Sold To / Vendu à *</label>
+              <input placeholder="e.g. Swiss Chalet" value={form.clientName} onChange={e => setF('clientName', e.target.value)} />
+            </div>
+            <div className="field">
+              {/* spacer */}
             </div>
             <div className="field" style={{gridColumn:'1/-1'}}>
               <label>Client Address / Adresse</label>
@@ -194,14 +238,28 @@ export default function InvoicesPage() {
             {invoices.map(inv => (
               <tr key={inv.id}>
                 <td className={styles.invNum}>{inv.invoice_number}</td>
-                <td style={{fontSize:12,color:'var(--text-2)'}}>{new Date(inv.invoice_date).toLocaleDateString('en-CA')}</td>
+                <td style={{fontSize:12,color:'var(--text-2)'}}>{isoToDisplay(inv.invoice_date)}</td>
                 <td>
                   <div style={{fontWeight:500}}>{inv.client_name}</div>
                   <div style={{fontSize:11,color:'var(--text-3)'}}>{inv.client_address}</div>
                 </td>
                 <td style={{fontSize:12,color:'var(--text-2)',maxWidth:160}}>{inv.description}</td>
                 <td style={{fontWeight:600,color:'var(--teal-600)'}}>${Number(inv.total).toFixed(2)}</td>
-                <td><button className="btn btn-sm" onClick={() => downloadPDF(inv)} disabled={busy}>⬇ PDF</button></td>
+                <td>
+                  <div className={styles.rowActions}>
+                    <button className="btn btn-sm" onClick={() => downloadPDF(inv)} disabled={busy}>
+                      ⬇ PDF
+                    </button>
+                    <button
+                      className={`btn btn-sm ${styles.deleteBtn}`}
+                      onClick={() => handleDelete(inv)}
+                      disabled={deletingId === inv.id}
+                      title="Delete invoice"
+                    >
+                      {deletingId === inv.id ? '…' : '🗑'}
+                    </button>
+                  </div>
+                </td>
               </tr>
             ))}
           </tbody>
