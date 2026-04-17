@@ -45,7 +45,7 @@ export default async function EmployeesPage() {
                 </td>
                 <td style={{fontSize:12,color:'var(--text-2)'}}>{emp.email || '—'}</td>
                 <td style={{fontSize:12,color:'var(--text-2)'}}>{emp.store?.name || 'No store assigned'}</td>
-                <td><span className={`badge badge-${emp.role}`}>{emp.role}</span></td>
+                <td><span className={`badge badge-${emp.role}`}>{emp.role === 'manager' ? 'Owner' : emp.role}</span></td>
               </tr>
             ))}
           </tbody>
