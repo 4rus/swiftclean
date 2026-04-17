@@ -177,7 +177,7 @@ export default function ChecklistPage() {
         <div className={styles.cardHead}>
           <div>
             <div className={styles.cardTitle}>{selectedStore?.name || 'Checklist'} — {dateLabel}</div>
-            <div className={styles.cardSub}>Resets automatically each day</div>
+            <div className={styles.cardSub}>Resets automatically every day</div>
           </div>
           {templates.length > 0 && (
             <div className={styles.progress}>
