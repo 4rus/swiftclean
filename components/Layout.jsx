@@ -67,13 +67,13 @@ export default function Layout({ children, profile, store }) {
           </div>
         </div>
         <div className={styles.topRight}>
-          {store && <span className={styles.storeBadge}>📍 {store.name}</span>}
+          {store && role !== 'manager' && <span className={styles.storeBadge}>📍 {store.name}</span>}
           {notifCount > 0 && <span className={styles.notifDot}>{notifCount}</span>}
           <div className={styles.userPill}>
             <div className={styles.avatar}>{initials(profile?.full_name)}</div>
             <div>
               <div className={styles.userName}>{profile?.full_name || 'User'}</div>
-              <div className={styles.userRole}>{role}</div>
+              <div className={styles.userRole}>{role === 'manager' ? 'Owner' : role}</div>
             </div>
           </div>
           <button className={styles.logoutBtn} onClick={handleLogout}>↩ Sign out</button>
