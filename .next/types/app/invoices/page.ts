@@ -1,8 +1,8 @@
-// File: C:\Users\sibha\OneDrive\Desktop\cleantrack_v2\cleantrack\app\login\page.jsx
-import * as entry from '../../../../app/login/page.js'
+// File: C:\Users\sibha\OneDrive\Desktop\cleantrack_v2\cleantrack\app\invoices\page.jsx
+import * as entry from '../../../../app/invoices/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 
-type TEntry = typeof import('../../../../app/login/page.js')
+type TEntry = typeof import('../../../../app/invoices/page.js')
 
 // Check that the entry is a valid entry
 checkFields<Diff<{

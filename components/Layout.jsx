@@ -7,7 +7,7 @@ import styles from './Layout.module.css'
 const NAV = [
   { href: '/dashboard',    label: 'Dashboard',    dot: 'teal',  roles: ['manager'] },
   { href: '/photos',       label: 'Photos',       dot: 'teal',  roles: ['employee', 'manager'] },
-  { href: '/checklist',    label: 'Checklist',    dot: 'green', roles: ['manager'] },
+  { href: '/checklist',    label: 'Checklist',    dot: 'green', roles: ['employee', 'manager'] },
   { href: '/invoices',     label: 'Invoices',     dot: 'amber', roles: ['manager'] },
   { href: '/activity',     label: 'Activity',     dot: 'blue',  roles: ['manager'] },
   { href: '/applications', label: 'Applications', dot: 'green', roles: ['manager'] },
@@ -27,7 +27,7 @@ export default function Layout({ children, profile, store }) {
   const [notifCount, setNotifCount] = useState(0)
   const [navOpen, setNavOpen] = useState(false)
 
-  const role = profile?.role || 'employee'
+  const role = profile?.role
 
   useEffect(() => {
     if (!profile?.id) return
@@ -73,7 +73,7 @@ export default function Layout({ children, profile, store }) {
             <div className={styles.avatar}>{initials(profile?.full_name)}</div>
             <div>
               <div className={styles.userName}>{profile?.full_name || 'User'}</div>
-              <div className={styles.userRole}>{role === 'manager' ? 'Owner' : role}</div>
+              <div className={styles.userRole}>{role === 'manager' ? 'Owner' : role || ''}</div>
             </div>
           </div>
           <button className={styles.logoutBtn} onClick={handleLogout}>↩ Sign out</button>

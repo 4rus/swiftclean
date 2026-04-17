@@ -38,6 +38,7 @@ export default function InvoicesPage() {
   const [store, setStore]     = useState(null)
   const [invoices, setInvoices] = useState([])
   const [showForm, setShowForm] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [saving, setSaving]   = useState(false)
   const [busy, setBusy]       = useState(false)
   const [deletingId, setDeletingId] = useState(null)
@@ -65,6 +66,7 @@ export default function InvoicesPage() {
     const list = inv || []
     setInvoices(list)
     setForm(f => ({ ...f, invoiceNumber: genNum(list), clientAddress: STORE_CLIENTS[p?.store?.name]?.address || '' }))
+    setLoading(false)
   }
 
   function setF(key, val) { setForm(f => ({ ...f, [key]: val })) }
@@ -131,6 +133,8 @@ export default function InvoicesPage() {
     })
     setBusy(false)
   }
+
+  if (loading) return null
 
   return (
     <Layout profile={profile} store={store}>

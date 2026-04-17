@@ -1,17 +1,10 @@
-.header { display: flex; align-items: flex-start; justify-content: space-between; }
+.header { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
 .title { font-size: 20px; font-weight: 600; }
 .sub { font-size: 13px; color: var(--text-2); }
-.twoCol { display: grid; grid-template-columns: 280px 1fr; gap: 1rem; align-items: start; }
+.storeSelect { font-size: 13px; padding: 6px 10px; border: 1px solid var(--border); border-radius: 6px; background: var(--surface); color: var(--text-1); cursor: pointer; min-width: 180px; }
 .cardHead { display: flex; align-items: center; justify-content: space-between; padding: 0.9rem 1.1rem; border-bottom: 1px solid var(--border); }
 .cardTitle { font-size: 14px; font-weight: 600; }
 .cardSub { font-size: 12px; color: var(--text-2); margin-top: 2px; }
-.cardFooter { padding: 1rem 1.1rem; border-top: 1px solid var(--border); }
-.jobItem { padding: 12px 1.1rem; border-bottom: 1px solid var(--border); cursor: pointer; transition: background 0.1s; display: flex; flex-direction: column; gap: 4px; }
-.jobItem:last-child { border-bottom: none; }
-.jobItem:hover { background: var(--gray-50); }
-.jobItem.selected { background: var(--teal-50); border-left: 3px solid var(--teal-400); }
-.jobName { font-weight: 500; font-size: 13px; }
-.jobLoc { font-size: 12px; color: var(--text-3); }
 .empty { padding: 1.5rem 1.1rem; font-size: 13px; color: var(--text-3); text-align: center; }
 .emptyState { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 4rem 2rem; gap: 10px; }
 .emptyIcon { font-size: 36px; }
@@ -21,16 +14,22 @@
 .progressFill { height: 100%; background: var(--teal-400); border-radius: 3px; transition: width 0.3s; }
 .progressText { font-size: 12px; font-weight: 500; color: var(--text-2); min-width: 32px; }
 .itemList { padding: 0.5rem 0; }
-.checkItem { display: flex; align-items: center; gap: 12px; padding: 10px 1.1rem; cursor: pointer; transition: background 0.1s; border-bottom: 1px solid var(--border); }
+.checkItem { display: flex; align-items: center; gap: 12px; padding: 10px 1.1rem; transition: background 0.1s; border-bottom: 1px solid var(--border); }
 .checkItem:last-child { border-bottom: none; }
 .checkItem:hover { background: var(--gray-50); }
 .checkItem.done .itemLabel { color: var(--text-3); text-decoration: line-through; }
-.checkbox { width: 18px; height: 18px; border-radius: 5px; border: 1.5px solid var(--gray-300); flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: background 0.15s, border-color 0.15s; }
+.checkbox { width: 18px; height: 18px; border-radius: 5px; border: 1.5px solid var(--gray-300); flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: background 0.15s, border-color 0.15s; cursor: pointer; }
 .checkbox.checked { background: var(--teal-400); border-color: var(--teal-400); }
 .checkmark { color: white; font-size: 11px; font-weight: 700; line-height: 1; }
-.itemLabel { font-size: 13px; }
+.itemLabel { font-size: 13px; flex: 1; cursor: pointer; }
+.deleteBtn { background: none; border: none; color: var(--text-3); font-size: 18px; line-height: 1; cursor: pointer; padding: 0 4px; border-radius: 4px; opacity: 0; transition: opacity 0.15s, color 0.15s; }
+.checkItem:hover .deleteBtn { opacity: 1; }
+.deleteBtn:hover { color: var(--red-500, #ef4444); }
+.addSection { display: flex; gap: 8px; padding: 0.9rem 1.1rem; border-top: 1px solid var(--border); }
+.addInput { flex: 1; font-size: 13px; padding: 7px 10px; border: 1px solid var(--border); border-radius: 6px; background: var(--surface); color: var(--text-1); outline: none; }
+.addInput:focus { border-color: var(--teal-400); }
 
 @media (max-width: 768px) {
-  .twoCol { grid-template-columns: 1fr; }
-  .header { flex-direction: column; gap: 10px; align-items: flex-start; }
+  .header { flex-direction: column; align-items: flex-start; }
+  .storeSelect { width: 100%; }
 }

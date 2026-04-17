@@ -71,5 +71,5 @@ export default async function DashboardPage() {
   )
 }
 
-function getGreeting() { const h = new Date().getHours(); return h<12?'morning':h<17?'afternoon':'evening' }
+function getGreeting() { const h = parseInt(new Date().toLocaleString('en-CA', { timeZone: 'America/Edmonton', hour: 'numeric', hour12: false })); return h<12?'morning':h<17?'afternoon':'evening' }
 function statusLabel(s) { return s==='done'?'Done':s==='in_progress'?'In progress':'Pending' }
